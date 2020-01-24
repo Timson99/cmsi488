@@ -1,10 +1,17 @@
-// An interpreter for Ael.
-//
+// An extended interpreter for Ael.
 // Example usage:
-//
-//   $ node ael-interpreter.js 'print 2; x = 22; print 1 + x / 2;'
+//   node new_ael_interpreter.js "print 2; x = 22; print 1 + x / 2;"
 //   2
 //   12
+//
+//   node new_ael_interpreter.js "x = 2 ** 2 ** 3; while x { x = x - 1; print x;};"
+//   255
+//   254
+//   ...
+//   0
+//
+//   node new_ael_interpreter.js "print 2 * 2 ** -3;"
+//   0.25
 
 const ohm = require('ohm-js');
 

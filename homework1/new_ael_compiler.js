@@ -66,13 +66,13 @@ class PrintStatement {
     this.expression = expression;
   }
 }
-/*
+
 class WhileStatement {
-  constructor(expression, block) {
+  constructor(loop_condition, block) {
     this.expression = expression;
   }
 }
-*/
+
 
 class BinaryExp {
   constructor(left, op, right) {
@@ -209,10 +209,12 @@ generators.javascript = () => {
 };
 
 generators.c = () => {
+
   generators.javascript();
   Object.assign(Program.prototype, {
     gen() {
       return `#include <stdio.h>
+#include <math.h>
 int main() {
     ${this.body.map(s => s.gen()).join('\n    ')}
     return 0;
@@ -225,10 +227,20 @@ int main() {
   Object.assign(PrintStatement.prototype, {
     gen() { return `printf("%d\\n", ${this.expression.gen()});`; },
   });
+  Object.assign(BinaryExp.prototype, {
+    gen() {
+      if(this.op === '**') {
+        return `(int) pow(${this.left.gen()}, ${this.right.gen()})`;
+      }
+      else {
+        return `(${this.left.gen()} ${ops[this.op]} ${this.right.gen()})`;
+      }
+    },
+  });
 };
 
 generators.stack = () => {
-  const ops = { '+': 'ADD', '-': 'SUB', '*': 'MUL', '/': 'DIV' };
+  const ops = { '+': 'ADD', '-': 'SUB', '*': 'MUL', '/': 'DIV', '**' : 'EXPO' };
 
   const instructions = [];
   function emit(instruction) { instructions.push(instruction); }
@@ -246,7 +258,7 @@ generators.stack = () => {
     gen() { this.left.gen(); this.right.gen(); emit(ops[this.op]); },
   });
   Object.assign(UnaryExp.prototype, {
-    gen() { this.expression.gen(); emit('NEG'); },
+    gen() { this.operand.gen(); emit('NEG'); },
   });
   Object.assign(NumericLiteral.prototype, {
     gen() { emit(`PUSH ${this.value}`); },

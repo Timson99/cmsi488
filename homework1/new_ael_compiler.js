@@ -2,9 +2,8 @@
 //
 // Example usage:
 //
-//   $ node ael-compiler.js --target=C 'print 42;'
-//   $ node ael-compiler.js --target=JavaScript 'print 42;'
-//   $ node ael-compiler.js --target=Stack 'print 42;'
+//   node new_ael_compiler.js -C "print 42;"
+//
 
 const ohm = require('ohm-js');
 
@@ -49,7 +48,13 @@ class Program {
     this.body = body;
   }
 }
-
+/*
+class Block {
+  constructor(expression) {
+    this.expression = expression;
+  }
+}
+*/
 class Assignment {
   constructor(id, expression) {
     Object.assign(this, { id, expression });
@@ -61,6 +66,13 @@ class PrintStatement {
     this.expression = expression;
   }
 }
+/*
+class WhileStatement {
+  constructor(expression, block) {
+    this.expression = expression;
+  }
+}
+*/
 
 class BinaryExp {
   constructor(left, op, right) {
@@ -97,15 +109,15 @@ class Identifier {
 
 const astBuilder = aelGrammar.createSemantics().addOperation('ast', {
   Program(body, _semicolons) { return new Program(body.ast()); },
-  Block(_open, ss, _semicolons, _close) { /* TODO */ },
+  Block(_open, ss, _semicolons, _close) { return ss.ast(); }, //TODO
   Statement_assign(id, _, expression) { return new Assignment(id.sourceString, expression.ast()); },
   Statement_print(_, expression) { return new PrintStatement(expression.ast()); },
-  Statement_while(_, id_num, block) { /* TODO */ },
+  Statement_while(_, id_num, block) { /* return new WhileStatement(id_num.ast(), block.ast());*/ }, //TODO
   Exp_binary(left, op, right) { return new BinaryExp(left.ast(), op.sourceString, right.ast()); },
   Term_binary(left, op, right) { return new BinaryExp(left.ast(), op.sourceString, right.ast()); },
   Factor_negate(_op, operand) { return new UnaryExp('-', operand.ast()); },
-  Power_negate(_op, p) { /* TODO */ },
-  Power_raise(p, _op, pow) { /* TODO */ },
+  Power_negate(_op, operand) { return new UnaryExp('-', operand.ast()); }, //TODO
+  Power_raise(left, op, right) { return new BinaryExp(left.ast(), op.sourceString, right.ast()); }, //TODO
   Primary_parens(_open, expression, _close) { return expression.ast(); },
   number(_chars) { return new NumericLiteral(+this.sourceString); },
   id(_firstChar, _restChars) { return new Identifier(this.sourceString); },
@@ -180,7 +192,7 @@ generators.javascript = () => {
     gen() { return `let ${this.id} = ${this.expression.gen()};`; },
   });
   Object.assign(PrintStatement.prototype, {
-    gen() { return `console.log(${this.expression.gen()};`; },
+    gen() { return `console.log(${this.expression.gen()});`; },
   });
   Object.assign(BinaryExp.prototype, {
     gen() { return `(${this.left.gen()} ${this.op} ${this.right.gen()})`; },

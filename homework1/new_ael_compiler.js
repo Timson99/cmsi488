@@ -239,7 +239,7 @@ int main() {
         return `(int) pow(${this.left.gen()}, ${this.right.gen()})`;
       }
       else {
-        return `(${this.left.gen()} ${ops[this.op]} ${this.right.gen()})`;
+        return `(${this.left.gen()} ${this.op} ${this.right.gen()})`;
       }
     },
   });

@@ -3,7 +3,7 @@
 // Example usage:
 //
 //   node new_ael_compiler.js -C "print 42;"
-//
+//   node new_ael_compiler.js -JavaScript "x = 2 ** 2 ** 3; while x { x = x - 1; print x;};"
 
 const ohm = require('ohm-js');
 
@@ -48,16 +48,10 @@ class Program {
     this.body = body;
   }
 }
-/*
-class Block {
-  constructor(expression) {
-    this.expression = expression;
-  }
-}
-*/
+
 class Assignment {
-  constructor(id, expression) {
-    Object.assign(this, { id, expression });
+  constructor(id, expression, first_assignment) {
+    Object.assign(this, { id, expression, first_assignment });
   }
 }
 
@@ -72,7 +66,6 @@ class WhileStatement {
     Object.assign(this, {loop_condition, block })
   }
 }
-
 
 class BinaryExp {
   constructor(left, op, right) {
@@ -109,15 +102,15 @@ class Identifier {
 
 const astBuilder = aelGrammar.createSemantics().addOperation('ast', {
   Program(body, _semicolons) { return new Program(body.ast()); },
-  Block(_open, ss, _semicolons, _close) { return ss.ast(); }, //TODO
-  Statement_assign(id, _, expression) { return new Assignment(id.sourceString, expression.ast()); },
+  Block(_open, ss, _semicolons, _close) { return ss.ast(); },
+  Statement_assign(id, _, expression) { return new Assignment(id.sourceString, expression.ast(), true); },
   Statement_print(_, expression) { return new PrintStatement(expression.ast()); },
-  Statement_while(_, id_num, block) { return new WhileStatement(id_num.ast(), block.ast()); }, //TODO
+  Statement_while(_, id_num, block) { return new WhileStatement(id_num.ast(), block.ast()); },
   Exp_binary(left, op, right) { return new BinaryExp(left.ast(), op.sourceString, right.ast()); },
   Term_binary(left, op, right) { return new BinaryExp(left.ast(), op.sourceString, right.ast()); },
   Factor_negate(_op, operand) { return new UnaryExp('-', operand.ast()); },
-  Power_negate(_op, operand) { return new UnaryExp('-', operand.ast()); }, //TODO
-  Power_raise(left, op, right) { return new BinaryExp(left.ast(), op.sourceString, right.ast()); }, //TODO
+  Power_negate(_op, operand) { return new UnaryExp('-', operand.ast()); },
+  Power_raise(left, op, right) { return new BinaryExp(left.ast(), op.sourceString, right.ast()); },
   Primary_parens(_open, expression, _close) { return expression.ast(); },
   number(_chars) { return new NumericLiteral(+this.sourceString); },
   id(_firstChar, _restChars) { return new Identifier(this.sourceString); },
@@ -151,16 +144,22 @@ Object.assign(Program.prototype, {
   check() { const context = new Set(); this.body.forEach(s => s.check(context)); return this; },
 });
 Object.assign(Assignment.prototype, {
-  check(context) { this.expression.check(context); context.add(this.id); },
+  check(context) {
+    this.expression.check(context);
+    if(!context.has(this.id)) { context.add(this.id); }
+    else { this.first_assignment = false; }
+  },
 });
 Object.assign(PrintStatement.prototype, {
   check(context) { this.expression.check(context); },
 });
 Object.assign(WhileStatement.prototype, {
-  check(context) { this.loop_condition.check(context); this.block.forEach(s => s.check(context));},
+  check(context) {
+    this.loop_condition.check(context); this.block.forEach(s => s.check(context));},
 });
 Object.assign(BinaryExp.prototype, {
-  check(context) { this.left.check(context); this.right.check(context); },
+  check(context) {
+    this.left.check(context); this.right.check(context); },
 });
 Object.assign(UnaryExp.prototype, {
   check(context) { this.operand.check(context);  },
@@ -192,13 +191,20 @@ generators.javascript = () => {
     gen() { return this.body.map(s => s.gen()).join('\n'); },
   });
   Object.assign(Assignment.prototype, {
-    gen() { return `let ${this.id} = ${this.expression.gen()};`; },
+    gen() {
+      if(this.first_assignment) {
+        return `let ${this.id} = ${this.expression.gen()};`;
+      }
+      else {
+        return `${this.id} = ${this.expression.gen()};`;
+      }
+    },
   });
   Object.assign(PrintStatement.prototype, {
     gen() { return `console.log(${this.expression.gen()});`; },
   });
   Object.assign(WhileStatement.prototype, {
-    gen() { return `while(${this.loop_condition.gen()}){ \n  ${this.block.map(s => s.gen()).join('\n  ')}\n}`; }, 
+    gen() { return `while(${this.loop_condition.gen()}){ \n  ${this.block.map(s => s.gen()).join('\n  ')}\n}`; },
   });
   Object.assign(BinaryExp.prototype, {
     gen() { return `(${this.left.gen()} ${this.op} ${this.right.gen()})`; },
@@ -228,10 +234,20 @@ int main() {
     },
   });
   Object.assign(Assignment.prototype, {
-    gen() { return `int ${this.id} = ${this.expression.gen()};`; },
+    gen() {
+      if(this.first_assignment) {
+        return `int ${this.id} = ${this.expression.gen()};`;
+      }
+      else {
+        return `${this.id} = ${this.expression.gen()};`;
+      }
+    },
   });
   Object.assign(PrintStatement.prototype, {
     gen() { return `printf("%d\\n", ${this.expression.gen()});`; },
+  });
+  Object.assign(WhileStatement.prototype, {
+    gen() {return `while(${this.loop_condition.gen()}){${this.block.map(s => s.gen()).join('\n    ')}\n}`; },
   });
   Object.assign(BinaryExp.prototype, {
     gen() {

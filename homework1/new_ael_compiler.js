@@ -69,7 +69,7 @@ class PrintStatement {
 
 class WhileStatement {
   constructor(loop_condition, block) {
-    this.expression = expression;
+    Object.assign(this, {loop_condition, block })
   }
 }
 
@@ -112,7 +112,7 @@ const astBuilder = aelGrammar.createSemantics().addOperation('ast', {
   Block(_open, ss, _semicolons, _close) { return ss.ast(); }, //TODO
   Statement_assign(id, _, expression) { return new Assignment(id.sourceString, expression.ast()); },
   Statement_print(_, expression) { return new PrintStatement(expression.ast()); },
-  Statement_while(_, id_num, block) { /* return new WhileStatement(id_num.ast(), block.ast());*/ }, //TODO
+  Statement_while(_, id_num, block) { return new WhileStatement(id_num.ast(), block.ast()); }, //TODO
   Exp_binary(left, op, right) { return new BinaryExp(left.ast(), op.sourceString, right.ast()); },
   Term_binary(left, op, right) { return new BinaryExp(left.ast(), op.sourceString, right.ast()); },
   Factor_negate(_op, operand) { return new UnaryExp('-', operand.ast()); },
@@ -156,6 +156,9 @@ Object.assign(Assignment.prototype, {
 Object.assign(PrintStatement.prototype, {
   check(context) { this.expression.check(context); },
 });
+Object.assign(WhileStatement.prototype, {
+  check(context) { this.loop_condition.check(context); this.block.forEach(s => s.check(context));},
+});
 Object.assign(BinaryExp.prototype, {
   check(context) { this.left.check(context); this.right.check(context); },
 });
@@ -193,6 +196,9 @@ generators.javascript = () => {
   });
   Object.assign(PrintStatement.prototype, {
     gen() { return `console.log(${this.expression.gen()});`; },
+  });
+  Object.assign(WhileStatement.prototype, {
+    gen() { return `while(${this.loop_condition.gen()}){ \n  ${this.block.map(s => s.gen()).join('\n  ')}\n}`; }, 
   });
   Object.assign(BinaryExp.prototype, {
     gen() { return `(${this.left.gen()} ${this.op} ${this.right.gen()})`; },

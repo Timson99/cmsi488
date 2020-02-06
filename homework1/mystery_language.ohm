@@ -1,1 +1,36 @@
+Homework-Lang {
+	Program = Dec* PrintStmt
+	Dec     = id “=” Exp
+	Exp     = Exp1 “?” Exp1 “:” Exp
+			     | Exp1
+	Exp1    = ParamList  “->” Exp2
+			     | Exp2
+	Exp2    = Exp3 “|” Exp2
+			     | Exp3
+	Exp3    = Exp4 “&” Exp3
+			     | Exp4
+	Exp4    = Exp5 relop Exp5
+			     | Exp5
+	Exp5    = Exp5 addop Exp6
+			     | Exp6
+	Exp6    = Exp 6 mulop Exp7
+			     | Exp7
+	Exp7    = unaryop Exp8
+			     | Exp8
+	Exp8    = Exp9 “**” Exp8
+			     | Exp9
+	Exp9    = id
+           | “(“ exp “)”
+           | “let” dec+ “in” Exp “end”
+           | id “(“ Args “)”
+           | “{“ exp ( “,” exp )* “}”
+           | “[“ exp ( “,” exp )* “}”
+           | “{“ KeyVal ( “,” KeyVal ) “}”
+           | Literal
+	Literal = intlit
+			     | numlit
+			     | charlit
+			     | stringlit
+	NumLit  = 
 
+}

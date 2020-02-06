@@ -62,5 +62,6 @@ Homework-Lang {
 	addop     =  "+" | "-" | "in"
         relop     =  "<" | "<=" | "=" | "≠" | ">=" | ">" | "divides"
 	mulop     =  "*" | "/" | "modulo"
+	space     +=  comment
 	comment   =  "--" (~"\n" any)* "\n"
 }

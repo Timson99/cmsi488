@@ -4,7 +4,7 @@
 //
 //   node new_ael_compiler.js -C "print 42;"
 //   node new_ael_compiler.js -JavaScript "x = 2 ** 2 ** 3; while x { x = x - 1; print x;};"
-//   node new_ael_compiler.js -Stack "x = 2; while x { x = x - 1; print x;};"
+//   node new_ael_compiler.js -Stack "x = 2; while x { while x{ x = x - 1; print x;};};"
 
 const ohm = require('ohm-js');
 
@@ -264,6 +264,7 @@ int main() {
 
 generators.stack = () => {
   const ops = { '+': 'ADD', '-': 'SUB', '*': 'MUL', '/': 'DIV', '**' : 'EXPO' };
+  let i = 0;
 
   const instructions = [];
   function emit(instruction) { instructions.push(instruction); }
@@ -278,7 +279,13 @@ generators.stack = () => {
     gen() { this.expression.gen(); emit('OUTPUT'); },
   });
   Object.assign(WhileStatement.prototype, {
-    gen() { emit(`LABEL L1`); this.loop_condition.gen(); emit('JZ L2'); this.block.forEach(s => s.gen()); emit('JUMP L1 \nLABEL L2'); },
+    gen() { 
+            let local_label = i;
+            i += 2;
+            emit(`LABEL L` + local_label);
+            this.loop_condition.gen(); emit('JZ L' + (local_label + 1)); 
+            this.block.forEach(s => s.gen()); 
+            emit('JUMP L' + local_label + '\nLABEL L' + (local_label + 1)); },
   });
   Object.assign(BinaryExp.prototype, {
     gen() { this.left.gen(); this.right.gen(); emit(ops[this.op]); },

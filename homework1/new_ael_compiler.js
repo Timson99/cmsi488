@@ -4,6 +4,7 @@
 //
 //   node new_ael_compiler.js -C "print 42;"
 //   node new_ael_compiler.js -JavaScript "x = 2 ** 2 ** 3; while x { x = x - 1; print x;};"
+//   node new_ael_compiler.js -Stack "x = 2; while x { x = x - 1; print x;};"
 
 const ohm = require('ohm-js');
 
@@ -275,6 +276,9 @@ generators.stack = () => {
   });
   Object.assign(PrintStatement.prototype, {
     gen() { this.expression.gen(); emit('OUTPUT'); },
+  });
+  Object.assign(WhileStatement.prototype, {
+    gen() { emit(`LABEL L1`); this.loop_condition.gen(); emit('JZ L2'); this.block.forEach(s => s.gen()); emit('JUMP L1 \nLABEL L2'); },
   });
   Object.assign(BinaryExp.prototype, {
     gen() { this.left.gen(); this.right.gen(); emit(ops[this.op]); },

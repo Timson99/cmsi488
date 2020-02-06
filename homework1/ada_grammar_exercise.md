@@ -1,11 +1,11 @@
 3. (14 pts) Here are a few Ohm grammar rules from the Ada programming language:
     
-    Exp     = Exp1 ("and" Exp1)* | Exp1 ("or" Exp1)*
-    Exp1    = Exp2 (relop Exp2)?
-    Exp2    = "-"? Exp3 (addop Exp3)*
-    Exp3    = Exp4 (mulop Exp4)*
-    Exp4    = Exp5 ("**"  Exp5)? | "not" Exp5 | "abs" Exp5
-    comment = "--" (~"\n" any)* "\n" 
+    Exp     = Exp1 ("and" Exp1)* | Exp1 ("or" Exp1)* <br>
+    Exp1    = Exp2 (relop Exp2)? <br>
+    Exp2    = "-"? Exp3 (addop Exp3)* <br>
+    Exp3    = Exp4 (mulop Exp4)* <br>
+    Exp4    = Exp5 ("**"  Exp5)? | "not" Exp5 | "abs" Exp5 <br>
+    comment = "--" (~"\n" any)* "\n" <br>
 
 	**a. What can you say about the relative precedences of and and or?**
 

@@ -1,36 +1,66 @@
 Homework-Lang {
-	Program = Dec* PrintStmt
-	Dec     = id “=” Exp
-	Exp     = Exp1 “?” Exp1 “:” Exp
-			     | Exp1
-	Exp1    = ParamList  “->” Exp2
-			     | Exp2
-	Exp2    = Exp3 “|” Exp2
-			     | Exp3
-	Exp3    = Exp4 “&” Exp3
-			     | Exp4
-	Exp4    = Exp5 relop Exp5
-			     | Exp5
-	Exp5    = Exp5 addop Exp6
-			     | Exp6
-	Exp6    = Exp 6 mulop Exp7
-			     | Exp7
-	Exp7    = unaryop Exp8
-			     | Exp8
-	Exp8    = Exp9 “**” Exp8
-			     | Exp9
-	Exp9    = id
-           | “(“ exp “)”
-           | “let” dec+ “in” Exp “end”
-           | id “(“ Args “)”
-           | “{“ exp ( “,” exp )* “}”
-           | “[“ exp ( “,” exp )* “}”
-           | “{“ KeyVal ( “,” KeyVal ) “}”
-           | Literal
-	Literal = intlit
-			     | numlit
-			     | charlit
-			     | stringlit
-	NumLit  = 
-
+	Program  = Dec* PrintStmt
+	Dec      = id “=” Exp 
+		   | FunDec
+		   | VarDec
+	FunDec   =  "to" "get" ("a" | "an" | "some" | "the")? Type id ("of" Params)? Block "end"
+	VarDec   =  "my" id "is" "always" Exp                      -- constant
+                   |  "my" id "is" Exp                             -- initialized
+                   |  "my" id "is" ("a" | "an") Type               -- uninitialized
+	Exp      = Exp1 “?” Exp1 “:” Exp
+                   | Exp1
+	Exp1     = ParamList  “->” Exp2
+	           | Exp2
+	Exp2     = Exp3 “|” Exp2
+                   | Exp3
+	Exp3     = Exp4 “&” Exp3
+		   | Exp4
+	Exp4     = Exp5 relop Exp5
+		   | Exp5
+	Exp5     = Exp5 addop Exp6
+		   | Exp6
+	Exp6     = Exp 6 mulop Exp7
+		   | Exp7
+	Exp7     = unaryop Exp8
+		   | Exp8
+	Exp8     = Exp9 “**” Exp8
+		   | Exp9
+	Exp9     = id
+                   | “(“ exp “)”
+                   | “let” dec + “in” Exp “end”
+                   | id “(“ Args “)”
+                   | “{“ exp ( “,” exp )* “}”
+                   | “[“ exp ( “,” exp )* “}”
+                   | “{“ KeyVal ( “,” KeyVal ) “}”
+                   | Literal
+	Literal   = "nothing"
+                   | "yes"
+                   | "no"
+	           | intlit
+	           | numlit
+	           | charlit
+		   | stringlit
+        keyword   = ("use" | "module" | "my" | "is" | "always" | "a" | "an"
+                   |  "boolean" | "character" | "whole" | "number" | "string"
+                   |  "list" | "has" | "end" | "to" | "get" | "some" | "the"
+                   |  "of" | "and" | "print" | "read" | "write" | "increment"
+                   |  "decrement" | "set" | "exit" | "return" | "fail" | "with"
+                   |  "do" | "nothing" | "after" | "sec" | "millisec" | "if"
+                   |  "unless" | "while" | "until" | "else" | "times" | "for"
+                   |  "each" | "in" | "by" | "try" | "recover" | "or" | "bitor"
+                   |  "bitxor" | "bitand" | "yes" | "not" | "no" | "complement"
+                   | "length" | "divides" | "modulo"
+                   ) ~idrest
+        id        =  ~keyword letter idrest*
+        idrest    =  "_" | "$" | alnum
+        intlit    =  digit+
+        numlit    =  digit+ "." digit+ (("E"|"e") ("+"|"-")? digit+)?
+	charlit   =  "'" (char | "\"") "'"
+        stringlit =  "\"" (char | "\'")* "\""
+	char      =  escape
+                   |  ~"\\" ~"\"" ~"\'" ~"\\n" any
+	addop     =  "+" | "-" | "in"
+        relop     =  "<" | "<=" | "=" | "≠" | ">=" | ">" | "divides"
+	mulop     =  "*" | "/" | "modulo"
+	comment   =  "--" (~"\n" any)* "\n"
 }

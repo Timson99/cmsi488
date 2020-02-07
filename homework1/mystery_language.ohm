@@ -1,46 +1,63 @@
-Homework-Lang {
-	Program  = Dec* PrintStmt
-	Dec      = id “=” Exp 
-		   | FunDec
-		   | VarDec
-	FunDec   =  "to" "get" ("a" | "an" | "some" | "the")? Type id ("of" Params)? Block "end"
-	VarDec   =  "my" id "is" "always" Exp                      -- constant
-                   |  "my" id "is" Exp                             -- initialized
-                   |  "my" id "is" ("a" | "an") Type               -- uninitialized
-	Exp      = Exp1 “?” Exp1 “:” Exp
+HomeworkLang {
+	Program    =  br* Import* Stmt (br+ Stmt) br*
+    Import     =  "use" "module" id br+
+    Stmt       =  Dec
+                   |  SimpleStmt Modifier?                           -- simple
+    SimpleStmt =  "print" Exp                                        -- print
+    			   |  "return" Exp?                                  -- return
+	Dec        =  id "=" Exp   -- label 
+		           | FunDec
+		           | VarDec
+                   | TypeDec
+	FunDec     =  "to" "get" ("a" | "an" | "some" | "the")? Type id ("of" Params)? Block "end"
+	VarDec     =  "my" id "is" "always" Exp                          -- constant
+                   |  "my" id "is" Exp                               -- initialized
+                   |  "my" id "is" ("a" | "an") Type                 -- uninitialized
+    TypeDec    =  ("a" | "an") id "has" ":" br+ (("a" | "an") Type id br+)+ "end"
+    Type       =  "boolean"
+                   |  "character"
+                   |  "whole"? "number"                              -- numeric
+                   |  "string"
+                   |  id
+                   | Type "list"                                     -- list
+    Params     =  Type id ("," Type id)* (","? "and" Type id)?
+    Block      =  ":" br+ (Stmt br+)+
+    Modifier   =  ("if" | "unless" | "while" | "until") Exp
+	Exp        = Exp1 "?" Exp1 ":" Exp                               -- ternary
                    | Exp1
-	Exp1     = ParamList  “->” Exp2
-	           | Exp2
-	Exp2     = Exp3 “|” Exp2
+	Exp1       = Params  "->" Exp2                                   -- params
+	               | Exp2
+	Exp2       = Exp3 "|" Exp2                                       -- or
                    | Exp3
-	Exp3     = Exp4 “&” Exp3
-		   | Exp4
-	Exp4     = Exp5 relop Exp5
-		   | Exp5
-	Exp5     = Exp5 addop Exp6
-		   | Exp6
-	Exp6     = Exp 6 mulop Exp7
-		   | Exp7
-	Exp7     = unaryop Exp8
-		   | Exp8
-	Exp8     = Exp9 “**” Exp8
-		   | Exp9
-	Exp9     = id
-                   | “(“ exp “)”
-                   | “let” dec + “in” Exp “end”
-                   | id “(“ Args “)”
-                   | “{“ exp ( “,” exp )* “}”
-                   | “[“ exp ( “,” exp )* “}”
-                   | “{“ KeyVal ( “,” KeyVal ) “}”
+	Exp3       = Exp4 "&" Exp3                                       -- and
+		           | Exp4
+	Exp4       = Exp5 relop Exp5                                     -- rel_operator
+		           | Exp5
+	Exp5       = Exp6 addop Exp5                                     -- addition
+		           | Exp6
+	Exp6       = Exp6 mulop Exp6                                     -- multiplication
+		           | Exp7
+	Exp7       = unaryop Exp8                                        -- not
+		           | Exp8
+	Exp8       = Exp9 "**" Exp8                                      -- power
+		           | Exp9
+	Exp9       = id                                                  -- create
+                   | "(" Exp ")"									 -- PAREN
+                   | "let" Dec+ "in" Exp "end"						 -- let
+                   | id "(" Args ")"								 -- func
+                   | "{" Exp ( "," Exp )* "}"                        -- set
+                   | "[" Exp ( "," Exp )* "]"                        -- array
+ //                  | "{" KeyVal ( “,” KeyVal ) "}"
                    | Literal
-	Literal   = "nothing"
+	Literal    = "nothing"
                    | "yes"
                    | "no"
-	           | intlit
-	           | numlit
-	           | charlit
-		   | stringlit
-        keyword   = ("use" | "module" | "my" | "is" | "always" | "a" | "an"
+	               | intlit
+	               | numlit
+	               | charlit
+		           | stringlit
+    Args        =  "(" (id ":" Exp ("," id ":" Exp)*)? ")"
+    keyword     = ("use" | "module" | "my" | "is" | "always" | "a" | "an"
                    |  "boolean" | "character" | "whole" | "number" | "string"
                    |  "list" | "has" | "end" | "to" | "get" | "some" | "the"
                    |  "of" | "and" | "print" | "read" | "write" | "increment"
@@ -51,17 +68,21 @@ Homework-Lang {
                    |  "bitxor" | "bitand" | "yes" | "not" | "no" | "complement"
                    | "length" | "divides" | "modulo"
                    ) ~idrest
-        id        =  ~keyword letter idrest*
-        idrest    =  "_" | "$" | alnum
-        intlit    =  digit+
-        numlit    =  digit+ "." digit+ (("E"|"e") ("+"|"-")? digit+)?
-	charlit   =  "'" (char | "\"") "'"
-        stringlit =  "\"" (char | "\'")* "\""
-	char      =  escape
+    id          =  ~keyword letter idrest*
+    idrest      =  "_" | "$" | alnum
+    intlit      =  digit+
+    numlit      =  digit+ "." digit+ (("E"|"e") ("+"|"-")? digit+)?
+	charlit     =  "'" (char | "\"") "'"
+    stringlit   =  "\"" (char | "\'")* "\""
+	char        =  escape
                    |  ~"\\" ~"\"" ~"\'" ~"\\n" any
-	addop     =  "+" | "-" | "in"
-        relop     =  "<" | "<=" | "=" | "≠" | ">=" | ">" | "divides"
-	mulop     =  "*" | "/" | "modulo"
-	space     +=  comment
-	comment   =  "--" (~"\n" any)* "\n"
+    escape      =  "\\\\" | "\\\"" | "\\'" | "\\n" | "\\t"
+                   |  "\\u{" hexDigit+ "}"                           -- codepoint
+	addop       =  "+" | "-" | "in"
+    relop       =  "<" | "<=" | "=" | "≠" | ">=" | ">" | "divides"
+	mulop       =  "*" | "/" | "modulo"
+    unaryop     =  "!"
+    br          =  ";" | "\n"
+	space       +=  comment
+	comment     =  "--" (~"\n" any)* "\n"
 }

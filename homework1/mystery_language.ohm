@@ -1,31 +1,35 @@
 HomeworkLang {
 	Program    =  Stmt*
-   	Stmt       =  Dec
-   		| Exp
-                | Assignment             -- assignment
-                | Call                   -- call
-                | "break"                -- break
-                | "return" Exp?          -- return
-                | "print" Args           -- print
+    Stmt       =  Dec
+    			//| Exp
+                | Assignment     ";"        -- assignment
+                | Call         ";"          -- call
+                | "break"        ";"        -- break
+                | "return" Exp?  ";"        -- return
+                | "print" Args      ";"     -- print
+                |  "if" Exp Block
+                	 ("else" "if" Exp Block)*
+                	 ("else" Block)?            -- if
+             	 |  "while" Exp Block         -- while
 	Dec        =  FunDec | TypeDec | VarDec
 	TypeDec    =  "struct" id "{" (Type id ";")* "}"
 	VarDec     =  Type id ("=" Exp)? ";"
-    	FunDec     =  "func" id Params (Stmt* ";")+ "end"
-    	Params     =  "(" (Param ("," Param))? ")"
+    	FunDec     =  "func" id Params (Stmt)+ "end"
+        Params       = "(" ListOf<Param, ","> ")"
     	Param      =  id (":" Type)?   
     	Type       =  Type "[" "]"               -- array
               	|  primtype
                	|  id
     	Assignment =  Increment                  -- increment
              	|  Var "=" Exp                -- plain
-    	Increment  = incop Var                  -- prefix
-              	|  Var incop                  -- postfix
+    	Increment  = incop Var                 -- prefix
+              	|  Var incop                 -- postfix
     	Var        = Var "[" Exp "]"            -- subscript
               	|  Var "." id                 -- select
               	|  Call
               	|  id
     	Call       =  id "(" Args ")"
-    	Block      =  ":" br+ (Stmt br+)+
+        Block       =  "{" (Stmt)* "}"
     	Modifier   =  ("if" | "unless" | "while" | "until") Exp
 	Exp        = Exp1 "?" Exp1 ":" Exp                               -- ternary
                    | Exp1
@@ -53,6 +57,9 @@ HomeworkLang {
                 | "[" Exp ( "," Exp )* "]"                        -- array
                 | Literal
 	Literal    = id
+    		| "null"
+            | "true"
+            | "false"
 	        | intlit
 	        | numlit
 	        | charlit

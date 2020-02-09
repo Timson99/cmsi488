@@ -1,28 +1,32 @@
 HomeworkLang {
-	Program    =  br* Import* Stmt (br+ Stmt) br*
-    Import     =  "use" "module" id br+
-    Stmt       =  Dec
-                   |  SimpleStmt Modifier?                           -- simple
-    SimpleStmt =  "print" Exp                                        -- print
-    			   |  "return" Exp?                                  -- return
-	Dec        =  id "=" Exp   -- label 
-		           | FunDec
-		           | VarDec
-                   | TypeDec
-	FunDec     =  "to" "get" ("a" | "an" | "some" | "the")? Type id ("of" Params)? Block "end"
-	VarDec     =  "my" id "is" "always" Exp                          -- constant
-                   |  "my" id "is" Exp                               -- initialized
-                   |  "my" id "is" ("a" | "an") Type                 -- uninitialized
-    TypeDec    =  ("a" | "an") id "has" ":" br+ (("a" | "an") Type id br+)+ "end"
-    Type       =  "boolean"
-                   |  "character"
-                   |  "whole"? "number"                              -- numeric
-                   |  "string"
-                   |  id
-                   | Type "list"                                     -- list
-    Params     =  Type id ("," Type id)* (","? "and" Type id)?
-    Block      =  ":" br+ (Stmt br+)+
-    Modifier   =  ("if" | "unless" | "while" | "until") Exp
+	Program    =  Stmt*
+   	Stmt       =  Dec
+   		| Exp
+                | Assignment             -- assignment
+                | Call                   -- call
+                | "break"                -- break
+                | "return" Exp?          -- return
+                | "print" Args           -- print
+	Dec        =  FunDec | TypeDec | VarDec
+	TypeDec    =  "struct" id "{" (Type id ";")* "}"
+	VarDec     =  Type id ("=" Exp)? ";"
+    	FunDec     =  "func" id Params (Stmt* ";")+ "end"
+    	Params     =  "(" (Param ("," Param))? ")"
+    	Param      =  id (":" Type)?   
+    	Type       =  Type "[" "]"               -- array
+              	|  primtype
+               	|  id
+    	Assignment =  Increment                  -- increment
+             	|  Var "=" Exp                -- plain
+    	Increment  = incop Var                  -- prefix
+              	|  Var incop                  -- postfix
+    	Var        = Var "[" Exp "]"            -- subscript
+              	|  Var "." id                 -- select
+              	|  Call
+              	|  id
+    	Call       =  id "(" Args ")"
+    	Block      =  ":" br+ (Stmt br+)+
+    	Modifier   =  ("if" | "unless" | "while" | "until") Exp
 	Exp        = Exp1 "?" Exp1 ":" Exp                               -- ternary
                    | Exp1
 	Exp1       = Params  "->" Exp2                                   -- params
@@ -39,50 +43,42 @@ HomeworkLang {
 		           | Exp7
 	Exp7       = unaryop Exp8                                        -- not
 		           | Exp8
-	Exp8       = Exp9 "**" Exp8                                      -- power
+	Exp8       = Exp9 "!"                                            -- factorial
 		           | Exp9
 	Exp9       = id                                                  -- create
-                   | "(" Exp ")"									 -- PAREN
-                   | "let" Dec+ "in" Exp "end"						 -- let
-                   | id "(" Args ")"								 -- func
-                   | "{" Exp ( "," Exp )* "}"                        -- set
-                   | "[" Exp ( "," Exp )* "]"                        -- array
- //                  | "{" KeyVal ( “,” KeyVal ) "}"
-                   | Literal
-	Literal    = "nothing"
-                   | "yes"
-                   | "no"
-	               | intlit
-	               | numlit
-	               | charlit
-		           | stringlit
-    Args        =  "(" (id ":" Exp ("," id ":" Exp)*)? ")"
-    keyword     = ("use" | "module" | "my" | "is" | "always" | "a" | "an"
-                   |  "boolean" | "character" | "whole" | "number" | "string"
-                   |  "list" | "has" | "end" | "to" | "get" | "some" | "the"
-                   |  "of" | "and" | "print" | "read" | "write" | "increment"
-                   |  "decrement" | "set" | "exit" | "return" | "fail" | "with"
-                   |  "do" | "nothing" | "after" | "sec" | "millisec" | "if"
-                   |  "unless" | "while" | "until" | "else" | "times" | "for"
-                   |  "each" | "in" | "by" | "try" | "recover" | "or" | "bitor"
-                   |  "bitxor" | "bitand" | "yes" | "not" | "no" | "complement"
-                   | "length" | "divides" | "modulo"
-                   ) ~idrest
-    id          =  ~keyword letter idrest*
-    idrest      =  "_" | "$" | alnum
-    intlit      =  digit+
-    numlit      =  digit+ "." digit+ (("E"|"e") ("+"|"-")? digit+)?
+             	| "(" Exp ")"									 -- PAREN
+                | "let" Dec+ "in" Exp "end"						 -- let
+                | id "(" Args ")"								 -- func
+                | "{" Exp ( "," Exp )* "}"                        -- set
+                | "[" Exp ( "," Exp )* "]"                        -- array
+                | Literal
+	Literal    = id
+	        | intlit
+	        | numlit
+	        | charlit
+		| stringlit
+    	Args       =  ListOf<Exp, ",">
+    	keyword     =  ("boolean" | "if" | "break" | "else" | "int"
+              	|  "for" | "new" | "return" | "char" | "struct"
+              	|  "null" | "while" | "real" | "true" | "string"
+              	|  "void" | "false" | "length" | "print") ~idrest
+    	id          =  ~keyword letter idrest*
+    	idrest      =  "_" | alnum | "$"
+    	intlit      =  digit+
+    	numlit      =  digit+ "." digit+ (("E"|"e") ("+"|"-")? digit+)?
 	charlit     =  "'" (char | "\"") "'"
-    stringlit   =  "\"" (char | "\'")* "\""
+    	stringlit   =  "\"" (char | "\'")* "\""  -- comment
 	char        =  escape
-                   |  ~"\\" ~"\"" ~"\'" ~"\\n" any
-    escape      =  "\\\\" | "\\\"" | "\\'" | "\\n" | "\\t"
-                   |  "\\u{" hexDigit+ "}"                           -- codepoint
+              	|  ~"\\" ~"\"" ~"\'" ~"\\n" any
+    	escape      =  "\\\\" | "\\\"" | "\\'" | "\\n" | "\\t"
+                |  "\\u{" hexDigit+ "}"                           -- codepoint
 	addop       =  "+" | "-" | "in"
-    relop       =  "<" | "<=" | "=" | "≠" | ">=" | ">" | "divides"
+    	relop       =  "<" | "<=" | "=" | "≠" | ">=" | ">" | "divides"
 	mulop       =  "*" | "/" | "modulo"
-    unaryop     =  "!"
-    br          =  ";" | "\n"
+    	unaryop     =  "!"
+    	br          =  ";" | "\n"
+    	primtype    =  "boolean" | "char" | "int" | "real" | "string"
+    	incop       =  "++" | "--"
 	space       +=  comment
 	comment     =  "--" (~"\n" any)* "\n"
 }

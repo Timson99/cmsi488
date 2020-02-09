@@ -1,84 +1,37 @@
 HomeworkLang {
-	Program    =  Stmt*
-   	Stmt       =  Dec
-   		| Exp
-                | Assignment             -- assignment
-                | Call                   -- call
-                | "break"                -- break
-                | "return" Exp?          -- return
-                | "print" Args           -- print
-	Dec        =  FunDec | TypeDec | VarDec
-	TypeDec    =  "struct" id "{" (Type id ";")* "}"
-	VarDec     =  Type id ("=" Exp)? ";"
-    	FunDec     =  "func" id Params (Stmt* ";")+ "end"
-    	Params     =  "(" (Param ("," Param))? ")"
-    	Param      =  id (":" Type)?   
-    	Type       =  Type "[" "]"               -- array
-              	|  primtype
-               	|  id
-    	Assignment =  Increment                  -- increment
-             	|  Var "=" Exp                -- plain
-    	Increment  = incop Var                  -- prefix
-              	|  Var incop                  -- postfix
-    	Var        = Var "[" Exp "]"            -- subscript
-              	|  Var "." id                 -- select
-              	|  Call
-              	|  id
-    	Call       =  id "(" Args ")"
-    	Block      =  ":" br+ (Stmt br+)+
-    	Modifier   =  ("if" | "unless" | "while" | "until") Exp
+	Program    =  (FuncDec)* Exp
+  FuncDec    =  "func" id Params Block
+  Params     = "(" ListOf<id, ","> ")"
+  FuncCall   =  id "(" Args ")"
+  Args       = ListOf<Exp, ",">
+  Block      = (Exp ";")+ "end"
 	Exp        = Exp1 "?" Exp1 ":" Exp                               -- ternary
-                   | Exp1
-	Exp1       = Params  "->" Exp2                                   -- params
-	               | Exp2
-	Exp2       = Exp3 "|" Exp2                                       -- or
-                   | Exp3
-	Exp3       = Exp4 "&" Exp3                                       -- and
-		           | Exp4
-	Exp4       = Exp5 relop Exp5                                     -- rel_operator
-		           | Exp5
-	Exp5       = Exp6 addop Exp5                                     -- addition
-		           | Exp6
-	Exp6       = Exp6 mulop Exp6                                     -- multiplication
-		           | Exp7
-	Exp7       = unaryop Exp8                                        -- not
-		           | Exp8
-	Exp8       = Exp9 "!"                                            -- factorial
-		           | Exp9
-	Exp9       = id                                                  -- create
-             	| "(" Exp ")"									 -- PAREN
-                | "let" Dec+ "in" Exp "end"						 -- let
-                | id "(" Args ")"								 -- func
-                | "{" Exp ( "," Exp )* "}"                        -- set
-                | "[" Exp ( "," Exp )* "]"                        -- array
-                | Literal
-	Literal    = id
-	        | intlit
-	        | numlit
-	        | charlit
-		| stringlit
-    	Args       =  ListOf<Exp, ",">
-    	keyword     =  ("boolean" | "if" | "break" | "else" | "int"
-              	|  "for" | "new" | "return" | "char" | "struct"
-              	|  "null" | "while" | "real" | "true" | "string"
-              	|  "void" | "false" | "length" | "print") ~idrest
-    	id          =  ~keyword letter idrest*
-    	idrest      =  "_" | alnum | "$"
-    	intlit      =  digit+
-    	numlit      =  digit+ "." digit+ (("E"|"e") ("+"|"-")? digit+)?
-	charlit     =  "'" (char | "\"") "'"
-    	stringlit   =  "\"" (char | "\'")* "\""  -- comment
-	char        =  escape
-              	|  ~"\\" ~"\"" ~"\'" ~"\\n" any
-    	escape      =  "\\\\" | "\\\"" | "\\'" | "\\n" | "\\t"
-                |  "\\u{" hexDigit+ "}"                           -- codepoint
-	addop       =  "+" | "-" | "in"
-    	relop       =  "<" | "<=" | "=" | "≠" | ">=" | ">" | "divides"
-	mulop       =  "*" | "/" | "modulo"
-    	unaryop     =  "!"
-    	br          =  ";" | "\n"
-    	primtype    =  "boolean" | "char" | "int" | "real" | "string"
-    	incop       =  "++" | "--"
-	space       +=  comment
-	comment     =  "--" (~"\n" any)* "\n"
+             | Exp1
+	Exp1       = Exp1 addop Exp2                                     -- addition
+		         | Exp2
+	Exp2       = Exp2 mulop Exp3                                     -- multiplication
+		         | Exp3
+	Exp3       =  "-" Exp4                                           -- negation
+		         | Exp4
+	Exp4       = Exp5 "!"                                            -- factorial
+		         | Exp5
+	Exp5       = id
+    				 | Literal
+             | FuncCall
+          	 | "(" Exp ")"									                       -- paren
+	Literal    = numlit
+		         | stringlit
+  keyword    = ("func" | "end") ~idrest
+  id         =  ~keyword (letter | "$") idrest*
+  idrest     = letter | digit | "$" | "_"
+  numlit     =  digit+ ("." digit+)? (("E" | "e") ("+" | "-")? digit+)?
+  stringlit  = "\"" char* "\""
+  char       = escape
+	           | ~"\\" ~"\"" ~"\n" any
+  escape     = "\\" ("\\" | "'" | "\"" | "n" | codepoint)
+  codepoint  = "u{"hexDigit hexDigit? hexDigit? hexDigit? hexDigit? hexDigit?"}"
+  addop      =  "+" | "-"
+  mulop      =  "*" | "/"
+  space      +=  comment
+  comment    =  "--}>" (~"\n" any)* "\n"
 }

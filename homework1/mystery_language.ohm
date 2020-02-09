@@ -1,11 +1,11 @@
 HomeworkLang {
 	Program    =  Stmt*
         Stmt       =  Dec
-                | Assignment     ";"                               -- assignment
-                | Call         ";"                                 -- call
-                | "break"        ";"                               -- break
-                | "return" Exp?  ";"                               -- return
-                | "print" Args      ";"                            -- print
+                | Assignment ";"                                   -- assignment
+                | Call ";"                                         -- call
+                | "break" ";"                                      -- break
+                | "return" Exp? ";"                                -- return
+                | "print" Args ";"                                 -- print
                 |  "if" Exp Block
                		("else" "if" Exp Block)*
                 	("else" Block)?                            -- if
@@ -73,11 +73,11 @@ HomeworkLang {
     	intlit     =  digit+
     	numlit     =  digit+ "." digit+ (("E"|"e") ("+"|"-")? digit+)?
 	charlit    =  "'" (char | "\"") "'"
-    	stringlit  =  "\"" (char | "\'")* "\""  -- comment
+    	stringlit  =  "\"" (char | "\'")* "\""                      -- comment
 	char       =  escape
               	|  ~"\\" ~"\"" ~"\'" ~"\\n" any
     	escape     =  "\\\\" | "\\\"" | "\\'" | "\\n" | "\\t"
-                |  "\\u{" hexDigit+ "}"                           -- codepoint
+                |  "\\u{" hexDigit+ "}"                             -- codepoint
 	addop      =  "+" | "-" | "in"
     	relop      =  "<" | "<=" | "=" | "≠" | ">=" | ">" | "divides"
 	mulop      =  "*" | "/" | "modulo"

@@ -15,9 +15,9 @@ HomeworkLang {
              | Exp4
   Exp4       = Exp5 "!"                                            -- factorial
              | Exp5
-  Exp5       = id
-             | Literal
+  Exp5       = Literal
              | FuncCall
+						 | id
              | "(" Exp ")"                                         -- paren
   Literal    = numlit
              | stringlit

@@ -1,33 +1,33 @@
 HomeworkLang {
-	Program    =  (FuncDec)* Exp
+  Program    =  (FuncDec)* Exp
   FuncDec    =  "func" id Params Block
   Params     = "(" ListOf<id, ","> ")"
   FuncCall   =  id "(" Args ")"
   Args       = ListOf<Exp, ",">
   Block      = (Exp ";")+ "end"
-	Exp        = Exp1 "?" Exp1 ":" Exp                               -- ternary
+  Exp        = Exp1 "?" Exp1 ":" Exp                               -- ternary
              | Exp1
-	Exp1       = Exp1 addop Exp2                                     -- addition
-		         | Exp2
-	Exp2       = Exp2 mulop Exp3                                     -- multiplication
-		         | Exp3
-	Exp3       =  "-" Exp4                                           -- negation
-		         | Exp4
-	Exp4       = Exp5 "!"                                            -- factorial
-		         | Exp5
-	Exp5       = id
-    				 | Literal
+  Exp1       = Exp1 addop Exp2                                     -- addition
+             | Exp2
+  Exp2       = Exp2 mulop Exp3                                     -- multiplication
+             | Exp3
+  Exp3       =  "-" Exp4                                           -- negation
+             | Exp4
+  Exp4       = Exp5 "!"                                            -- factorial
+             | Exp5
+  Exp5       = id
+             | Literal
              | FuncCall
-          	 | "(" Exp ")"									                       -- paren
-	Literal    = numlit
-		         | stringlit
+             | "(" Exp ")"                                         -- paren
+  Literal    = numlit
+             | stringlit
   keyword    = ("func" | "end") ~idrest
   id         =  ~keyword (letter | "$") idrest*
   idrest     = letter | digit | "$" | "_"
   numlit     =  digit+ ("." digit+)? (("E" | "e") ("+" | "-")? digit+)?
   stringlit  = "\"" char* "\""
   char       = escape
-	           | ~"\\" ~"\"" ~"\n" any
+             | ~"\\" ~"\"" ~"\n" any
   escape     = "\\" ("\\" | "'" | "\"" | "n" | codepoint)
   codepoint  = "u{"hexDigit hexDigit? hexDigit? hexDigit? hexDigit? hexDigit?"}"
   addop      =  "+" | "-"

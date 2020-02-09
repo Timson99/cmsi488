@@ -29,11 +29,11 @@ const ohm = require('ohm-js');
 // -----------------------------------------------------------------------------
 
 const aelGrammar = ohm.grammar(`Ael {
-  Program = (Statement ";")+
-  Block = "{" (Statement ";")+ "}"
-  Statement = id "=" Exp                      --assign
-            | print Exp                       --print
-            | "while" (id | number) Block     --while
+  Program = (Statement)+
+  Block = "{" (Statement)+ "}"
+  Statement = id "=" Exp ";"                  --assign
+            | print Exp  ";"                  --print
+            | "while" (Exp) Block             --while
   Exp       = Exp ("+" | "-") Term            --binary
             | Term
   Term      = Term ("*"| "/") Factor          --binary
@@ -115,11 +115,11 @@ class Identifier {
 // -----------------------------------------------------------------------------
 
 const astBuilder = aelGrammar.createSemantics().addOperation('ast', {
-  Program(body, _semicolons) { return new Program(body.ast()); },
-  Block(_open, ss, _semicolons, _close) { return ss.ast(); },
-  Statement_assign(id, _, expression) { return new Assignment(id.sourceString, expression.ast(), true); },
-  Statement_print(_, expression) { return new PrintStatement(expression.ast()); },
-  Statement_while(_, idNum, block) { return new WhileStatement(idNum.ast(), block.ast()); },
+  Program(body) { return new Program(body.ast()); },
+  Block(_open, ss, _close) { return ss.ast(); },
+  Statement_assign(id, _, expression, _semicolon) { return new Assignment(id.sourceString, expression.ast(), true); },
+  Statement_print(_, expression, _semicolon) { return new PrintStatement(expression.ast()); },
+  Statement_while(_, exp, block) { return new WhileStatement(exp.ast(), block.ast()); },
   Exp_binary(left, op, right) { return new BinaryExp(left.ast(), op.sourceString, right.ast()); },
   Term_binary(left, op, right) { return new BinaryExp(left.ast(), op.sourceString, right.ast()); },
   Factor_negate(_op, operand) { return new UnaryExp('-', operand.ast()); },

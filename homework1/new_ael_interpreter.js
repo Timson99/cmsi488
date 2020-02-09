@@ -14,7 +14,7 @@
 //   2
 //   12
 //
-//   node new_ael_interpreter.js "x = 2 ** 2; while x { x = x - 1; print x;};"
+//   node new_ael_interpreter.js "x = 2 ** 2; while x { x = x - 1; print x;}"
 //   3
 //   2
 //   1
@@ -26,11 +26,11 @@
 const ohm = require('ohm-js');
 
 const aelGrammar = ohm.grammar(`Ael {
-  Program = (Statement ";")+
-  Block = "{" (Statement ";")+ "}"
-  Statement = id "=" Exp                      --assign
-            | print Exp                       --print
-            | "while" (id | number) Block     --while
+  Program = (Statement)+
+  Block = "{" (Statement)+ "}"
+  Statement = id "=" Exp ";"                  --assign
+            | print Exp  ";"                  --print
+            | "while" (Exp) Block             --while
   Exp       = Exp "+" Term                    --plus
             | Exp "-" Term                    --minus
             | Term
@@ -41,7 +41,6 @@ const aelGrammar = ohm.grammar(`Ael {
             | Power
   Power     = Primary "**" Power              --raise
             | Primary
-
   Primary   = "(" Exp ")"                     --parens
             | number
             | id
@@ -54,10 +53,10 @@ const memory = new Map();
 
 // This language is so simple, we don't need an AST.
 const semantics = aelGrammar.createSemantics().addOperation('exec', {
-  Program(ss, _semicolons) { ss.exec(); },
-  Block(_open, ss, _semicolons, _close) { ss.exec(); },
-  Statement_assign(i, _eq, e) { memory.set(i.sourceString, e.eval()); },
-  Statement_print(_, e) { console.log(e.eval()); },
+  Program(ss) { ss.exec(); },
+  Block(_open, ss, _close) { ss.exec(); },
+  Statement_assign(i, _eq, e, _semicolon) { memory.set(i.sourceString, e.eval()); },
+  Statement_print(_, e, _semicolon) { console.log(e.eval()); },
   Statement_while(_, id_num, block) { while (id_num.eval()) { block.exec(); } },
 }).addOperation('eval', {
   Exp_plus(e, _op, t) { return e.eval() + t.eval(); },

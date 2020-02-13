@@ -10,11 +10,11 @@ function isVisa(s) {
 function isMasterCard(s) {
   return /^5[1-5]\d{14}$/.test(s)
 }
-/**
+///*
 function isAdaFloat(s) {
-  return .test(s)
+  return /(\d*(.(\d+))?(E(-|\+)?\d*)?|)/.test(s)
 }
-
+/*
 function isNotThreeEndingInOO(s) {
   return /^[^[a-zA-Z](O|o){2}]$/.test(s)
 }
@@ -39,9 +39,9 @@ function isNotDogDoorDenWithLookAround() {
   return .test(s)
 }
 **/
-module.exports = { 
-  isCanadianPostalCode, 
-  isVisa, 
+module.exports = {
+  isCanadianPostalCode,
+  isVisa,
   isMasterCard,
   isDivisibleBy64,
   isEightThroughTwentyNine

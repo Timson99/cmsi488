@@ -25,19 +25,19 @@ const FIXTURE = {
   isDivisibleBy64: {
     good: ['0','1101000000'],
     bad: ['1', '00000000100000', '1000000001'],
-  }/*,
+  },
   isEightThroughTwentyNine: {
     good: Array(22).fill(0).map((x, i) => i + 8),
     bad: ['3', '-0', '00009', 'dog', '361'],
-  },
+  },/*
   isMLComment: {
     good: ['(**)', '(*  *)', '(*756****)'],
     bad: ['', '(*)', '(* before (* inner *) after *)'],
-  },
+  },*/
   isNotDogDoorDenNoLookAround: {
     good: ['', 'dogs', 'doors', 'do', 'hotdog'],
     bad: ['dog', 'door'],
-  },*/
+  },
 };
 /*
 FIXTURE.isNotDOgDoorDenWithLookAround = FIXTURE.isNotDOgDoorDenNoLookAround;

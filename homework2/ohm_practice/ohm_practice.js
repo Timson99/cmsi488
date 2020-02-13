@@ -1,4 +1,3 @@
-
 const ohm = require('ohm-js');
 
 const HW2_Q2 = ohm.grammar(`HW2_Q2 {
@@ -55,9 +54,9 @@ function isNotDogDoorDenNoLookAround(s) {
 function isNotDogDoorDenWithLookAround() {
   return HW2_Q2.match(s, 'isNotDogDoorDenWithLookAround').succeeded();
 }
-**/
+* */
 module.exports = {
   isCanadianPostalCode,
   isVisa,
-  isMasterCard
-}
+  isMasterCard,
+};

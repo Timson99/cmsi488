@@ -13,11 +13,11 @@ const FIXTURE = {
   isMasterCard: {
     good: ['5100000000000000', '5294837679998888'],
     bad: ['5763777373890002', '513988843211541', '5432333xxxxxxxxx'],
-  },/*
+  },
   isAdaFloat: {
     good: ['1', '23_5', '4#20#', '13#fD34_2_1#', '1.3e2', '11_3.3_3_222E-199'],
     bad: ['dog', '4fe', 'p#ii#', '_', '_33', '5__2', '9#88#E-1e3', '-6'],
-  },*/
+  },
   isNotThreeEndingInOO: {
     good: ['', 'fog', 'Tho'],
     bad: ['fOo', 'gOO'],
@@ -29,19 +29,19 @@ const FIXTURE = {
   isEightThroughTwentyNine: {
     good: Array(22).fill(0).map((x, i) => i + 8),
     bad: ['3', '-0', '00009', 'dog', '361'],
-  },/*
+  },
   isMLComment: {
     good: ['(**)', '(*  *)', '(*756****)'],
     bad: ['', '(*)', '(* before (* inner *) after *)'],
-  },*/
+  },
   isNotDogDoorDenNoLookAround: {
     good: ['', 'dogs', 'doors', 'do', 'hotdog'],
     bad: ['dog', 'door'],
   },
 };
-/*
-FIXTURE.isNotDOgDoorDenWithLookAround = FIXTURE.isNotDOgDoorDenNoLookAround;
-*/
+
+FIXTURE.isNotDogDoorDenWithLookAround = FIXTURE.isNotDogDoorDenNoLookAround;
+
 describe('In the regex tester', () => {
   Object.entries(r).forEach(([name, matchingFunction]) => {
     describe(`the function ${name}`, () => {

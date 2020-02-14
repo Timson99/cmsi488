@@ -31,7 +31,8 @@ const FIXTURE = {
       .fill(0)
       .map((x, i) => i + 8),
     bad: ['3', '-0', '00009', 'dog', '361'],
-  }, /*  isMLComment: {
+  },
+  isMLComment: {
     good: ['(**)', '(*  *)', '(*756****)'],
     bad: ['', '(*)', '(* before (* inner *) after *)'],
   }, */
@@ -40,9 +41,9 @@ const FIXTURE = {
     bad: ['dog', 'door'],
   },
 };
-/*
+
 FIXTURE.isNotDOgDoorDenWithLookAround = FIXTURE.isNotDOgDoorDenNoLookAround;
-*/
+
 describe('In the regex tester', () => {
   Object.entries(r).forEach(([name, matchingFunction]) => {
     describe(`the function ${name}`, () => {

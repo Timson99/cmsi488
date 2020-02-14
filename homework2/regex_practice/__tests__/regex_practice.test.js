@@ -35,7 +35,7 @@ const FIXTURE = {
   isMLComment: {
     good: ['(**)', '(*  *)', '(*756****)'],
     bad: ['', '(*)', '(* before (* inner *) after *)'],
-  }, */
+  }, 
   isNotDogDoorDenNoLookAround: {
     good: ['', 'dogs', 'doors', 'do', 'hotdog'],
     bad: ['dog', 'door'],

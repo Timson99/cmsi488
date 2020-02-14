@@ -21,7 +21,9 @@ const HW2_Q2 = ohm.grammar(`HW2_Q2 {
 
   isEightThroughTwentyNine = ("8"|"9")                           --eightnine
                            |(("1"|"2") digit)                    --therest
-  isMLComment = space
+                           
+  isMLComment = "(*" (~"(*" ~"*)"  any)* "*)"
+
   isNotDogDoorDenNoLookAround = space
   isNotDogDoorDenWithLookAround = space
 
@@ -54,11 +56,11 @@ function isDivisibleBy64(s) {
 function isEightThroughTwentyNine(s) {
   return HW2_Q2.match(s, 'isEightThroughTwentyNine').succeeded();
 }
-/*
+
 function isMLComment(s) {
   return HW2_Q2.match(s, 'isMLComment').succeeded();
 }
-
+/*
 function isNotDogDoorDenNoLookAround(s) {
   return HW2_Q2.match(s, 'isNotDogDoorDenNoLookAround').succeeded();
 }
@@ -75,5 +77,6 @@ module.exports = {
   isNotThreeEndingInOO,
   isDivisibleBy64,
   isEightThroughTwentyNine,
+  isMLComment,
 
 };

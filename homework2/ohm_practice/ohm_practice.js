@@ -1,11 +1,10 @@
-
 const ohm = require('ohm-js');
 
 const HW2_Q2 = ohm.grammar(`HW2_Q2 {
   isCanadianPostalCode = letter digit letter " " digit letter digit
   isVisa = "4" digit digit digit digit digit digit digit digit digit digit digit digit digit digit digit --first
          | digit digit digit digit digit digit digit digit digit digit digit digit --different
-  isMasterCard = "5" digit digit digit digit digit digit digit digit digit digit digit digit digit digit
+  isMasterCard = "5" ("1"|"2"|"3"|"4"|"5") digit digit digit digit digit digit digit digit digit digit digit digit digit digit
   isAdaFloat = space
   isNotThreeEndingInOO = space
   isDivisibleBy64 = space
@@ -55,9 +54,9 @@ function isNotDogDoorDenNoLookAround(s) {
 function isNotDogDoorDenWithLookAround() {
   return HW2_Q2.match(s, 'isNotDogDoorDenWithLookAround').succeeded();
 }
-**/
+* */
 module.exports = {
   isCanadianPostalCode,
   isVisa,
-  isMasterCard
-}
+  isMasterCard,
+};

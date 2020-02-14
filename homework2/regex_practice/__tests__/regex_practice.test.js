@@ -35,14 +35,14 @@ const FIXTURE = {
   isMLComment: {
     good: ['(**)', '(*  *)', '(*756****)'],
     bad: ['', '(*)', '(* before (* inner *) after *)'],
-  }, 
+  },
   isNotDogDoorDenNoLookAround: {
     good: ['', 'dogs', 'doors', 'do', 'hotdog'],
     bad: ['dog', 'door'],
   },
 };
 
-FIXTURE.isNotDOgDoorDenWithLookAround = FIXTURE.isNotDOgDoorDenNoLookAround;
+FIXTURE.isNotDogDoorDenWithLookAround = FIXTURE.isNotDogDoorDenNoLookAround;
 
 describe('In the regex tester', () => {
   Object.entries(r).forEach(([name, matchingFunction]) => {

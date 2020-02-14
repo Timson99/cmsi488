@@ -27,24 +27,27 @@ function isDivisibleBy64(s) {
 function isEightThroughTwentyNine(s) {
   return /^[8-9]|[1]\d|2[0-9]/.test(s);
 }
-/*
+
 function isMLComment(s) {
-  return .test(s)
+  return /^\(\*((?!\(\*)(?!\*\)).)*\*\)$/.test(s)
 }
 
-function isNotDogDoorDenNoLookAround(s) {
-  return /^[^d(en|(o(or|g)))]/.test(s)
-}
 /*
-function isNotDogDoorDenWithLookAround() {
-  return .test(s)
+function isNotDogDoorDenNoLookAround(s) {
+  return /^(((dog|door|den)?+([A-Za-z]+))|())$/.test(s)
 }
-* */
+*/
+function isNotDogDoorDenWithLookAround(s) {
+  return /^((?!(dog|door|den))[A-Za-z]*)|((dog|door|den)[A-Za-z]+)$/.test(s)
+}
+
 module.exports = {
   isCanadianPostalCode,
   isVisa,
   isMasterCard,
+  isAdaFloat,
   isDivisibleBy64,
   isEightThroughTwentyNine,
-  isAdaFloat,
+  isMLComment,
+  isNotDogDoorDenWithLookAround,
 };

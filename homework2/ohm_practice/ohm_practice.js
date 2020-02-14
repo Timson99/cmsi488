@@ -3,8 +3,8 @@ const ohm = require('ohm-js');
 const HW2_Q2 = ohm.grammar(`HW2_Q2 {
   isCanadianPostalCode = letter digit letter " " digit letter digit
 
-  isVisa = "4" digit digit digit digit digit digit digit digit digit digit digit digit digit digit digit --first
-         | digit digit digit digit digit digit digit digit digit digit digit digit                       --second
+  isVisa = "4" digit digit digit digit digit digit digit digit digit digit digit digit digit digit digit     --Fifteen
+         | "4" digit digit digit digit digit digit digit digit digit digit digit digit                       --Twelve
 
   isMasterCard = "5" ("1"|"2"|"3"|"4"|"5") digit digit digit digit digit digit digit digit digit digit digit digit digit digit
 

@@ -31,10 +31,11 @@ const FIXTURE = {
       .fill(0)
       .map((x, i) => i + 8),
     bad: ['3', '-0', '00009', 'dog', '361'],
-  }, /*  isMLComment: {
+  },
+  isMLComment: {
     good: ['(**)', '(*  *)', '(*756****)'],
     bad: ['', '(*)', '(* before (* inner *) after *)'],
-  }, */
+  }, 
   isNotDogDoorDenNoLookAround: {
     good: ['', 'dogs', 'doors', 'do', 'hotdog'],
     bad: ['dog', 'door'],

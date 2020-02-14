@@ -11,7 +11,9 @@ function isMasterCard(s) {
 }
 // /*
 function isAdaFloat(s) {
-  return /(\d*(.(\d+))?(E(-|\+)?\d*)?|)/.test(s);
+  return /^\d(_?\d)*(((\.\d(_?\d)*)?)|(#[\dA-Za-z](_?[\dA-Za-z])*((\.[\dA-Za-z](_?[\dA-Za-z])*)?#)))([Ee](-|\+)?\d(_?\d)*)?$/.test(
+    s,
+  );
 }
 /*
 function isNotThreeEndingInOO(s) {
@@ -44,4 +46,5 @@ module.exports = {
   isMasterCard,
   isDivisibleBy64,
   isEightThroughTwentyNine,
+  isAdaFloat,
 };

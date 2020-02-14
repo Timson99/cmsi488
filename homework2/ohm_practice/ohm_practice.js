@@ -15,7 +15,10 @@ const HW2_Q2 = ohm.grammar(`HW2_Q2 {
   adaExtInt = alnum ("_"? alnum)*
 
   isNotThreeEndingInOO = space
-  isDivisibleBy64 = space
+
+  isDivisibleBy64 = (~"1000000"  ("0" | "1"))*  "1000000"         --nonzero
+                  |  ("0")+                                     --zero
+
   isEightThroughTwentyNine = space
   isMLComment = space
   isNotDogDoorDenNoLookAround = space
@@ -42,11 +45,11 @@ function isAdaFloat(s) {
 function isNotThreeEndingInOO(s) {
   return HW2_Q2.match(s, 'isNotThreeEndingInOO').succeeded();
 }
-
+*/
 function isDivisibleBy64(s) {
   return HW2_Q2.match(s, 'isDivisibleBy64').succeeded();
 }
-
+/*
 function isEightThroughTwentyNine(s) {
   return HW2_Q2.match(s, 'isEightThroughTwentyNine').succeeded();
 }
@@ -68,4 +71,5 @@ module.exports = {
   isVisa,
   isMasterCard,
   isAdaFloat,
+  isDivisibleBy64
 };

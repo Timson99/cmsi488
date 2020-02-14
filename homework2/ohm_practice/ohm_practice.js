@@ -6,7 +6,8 @@ const HW2_Q2 = ohm.grammar(`HW2_Q2 {
   isVisa = "4" digit digit digit digit digit digit digit digit digit digit digit digit digit digit digit     --Fifteen
          | "4" digit digit digit digit digit digit digit digit digit digit digit digit                       --Twelve
 
-  isMasterCard = "5" ("1"|"2"|"3"|"4"|"5") digit digit digit digit digit digit digit digit digit digit digit digit digit digit
+  isMasterCard = "5" ("1"|"2"|"3"|"4"|"5") digit digit digit digit digit digit
+                 digit digit digit digit digit digit digit digit
 
   isAdaFloat = adaBasedLit | adaDecimalLit
   adaDecimalLit = adaInt ("." adaInt)? (("E"|"e")("+"|"-")? adaInt)?
@@ -14,18 +15,24 @@ const HW2_Q2 = ohm.grammar(`HW2_Q2 {
   adaInt = digit ("_"? digit)*
   adaExtInt = alnum ("_"? alnum)*
 
-  isNotThreeEndingInOO =  ~(any ("o"|"O")("o"|"O")) any*
+  isNotThreeEndingInOO =  ~(letter ("o"|"O")("o"|"O")) letter*
 
   isDivisibleBy64 = (~"1000000"  ("0" | "1"))*  "1000000"         --nonzero
                   |  ("0")+                                       --zero
 
   isEightThroughTwentyNine = ("8"|"9")                           --eightnine
                            |(("1"|"2") digit)                    --therest
-                           
+
   isMLComment = "(*" (~"(*" ~"*)"  any)* "*)"
 
-  isNotDogDoorDenNoLookAround = space
-  isNotDogDoorDenWithLookAround = space
+  isNotDogDoorDenNoLookAround = dogdoorden letter+               --begins
+                              | (dogdoorden)? letter+            --anywhere
+                              | ""                               --nothing
+
+  isNotDogDoorDenWithLookAround = dogdoorden letter+             --begins
+                                 | ~dogdoorden letter*           --anywhere
+
+  dogdoorden = "dog" | "door" | "den"
 
 }`);
 
@@ -60,15 +67,15 @@ function isEightThroughTwentyNine(s) {
 function isMLComment(s) {
   return HW2_Q2.match(s, 'isMLComment').succeeded();
 }
-/*
+
 function isNotDogDoorDenNoLookAround(s) {
   return HW2_Q2.match(s, 'isNotDogDoorDenNoLookAround').succeeded();
 }
-/*
-function isNotDogDoorDenWithLookAround() {
+
+function isNotDogDoorDenWithLookAround(s) {
   return HW2_Q2.match(s, 'isNotDogDoorDenWithLookAround').succeeded();
 }
-* */
+
 module.exports = {
   isCanadianPostalCode,
   isVisa,
@@ -78,5 +85,6 @@ module.exports = {
   isDivisibleBy64,
   isEightThroughTwentyNine,
   isMLComment,
-
+  isNotDogDoorDenNoLookAround,
+  isNotDogDoorDenWithLookAround,
 };

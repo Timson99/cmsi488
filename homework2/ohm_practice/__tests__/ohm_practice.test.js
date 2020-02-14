@@ -42,7 +42,7 @@ const FIXTURE = {
   },
 };
 
-FIXTURE.isNotDOgDoorDenWithLookAround = FIXTURE.isNotDOgDoorDenNoLookAround;
+FIXTURE.isNotDogDoorDenWithLookAround = FIXTURE.isNotDogDoorDenNoLookAround;
 
 describe('In the regex tester', () => {
   Object.entries(r).forEach(([name, matchingFunction]) => {

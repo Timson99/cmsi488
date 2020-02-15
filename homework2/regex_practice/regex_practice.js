@@ -15,11 +15,11 @@ function isAdaFloat(s) {
     s,
   );
 }
-/*
+
 function isNotThreeEndingInOO(s) {
-  return /^[^[a-zA-Z](O|o){2}]$/.test(s)
+  return /^^((?!^[a-zA-Z][Oo][Oo]$)[a-zA-Z]*)$$/.test(s)
 }
-*/
+
 function isDivisibleBy64(s) {
   return /^(0+|[0-1]*1000000)$/.test(s);
 }
@@ -32,11 +32,10 @@ function isMLComment(s) {
   return /^\(\*((?!\(\*)(?!\*\)).)*\*\)$/.test(s)
 }
 
-/*
 function isNotDogDoorDenNoLookAround(s) {
-  return /^(((dog|door|den)?+([A-Za-z]+))|())$/.test(s)
+  return /^(|[^d][a-zA-Z]*|d([^eo][a-zA-Z]*)??|do([^go][a-zA-Z]*)??|de([^n][a-zA-Z]*)??|doo([^r][a-zA-Z]*)??|((dog|den|door)([a-zA-Z]+)))$/.test(s)
 }
-*/
+
 function isNotDogDoorDenWithLookAround(s) {
   return /^((?!(dog|door|den))[A-Za-z]*)|((dog|door|den)[A-Za-z]+)$/.test(s)
 }
@@ -46,8 +45,10 @@ module.exports = {
   isVisa,
   isMasterCard,
   isAdaFloat,
+  isNotThreeEndingInOO,
   isDivisibleBy64,
   isEightThroughTwentyNine,
   isMLComment,
+  isNotDogDoorDenNoLookAround,
   isNotDogDoorDenWithLookAround,
 };

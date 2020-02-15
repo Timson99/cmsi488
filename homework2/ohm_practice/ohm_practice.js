@@ -1,19 +1,19 @@
 const ohm = require('ohm-js');
 
 const HW2_Q2 = ohm.grammar(`HW2_Q2 {
-  isCanadianPostalCode = letter digit letter " " digit letter digit
+  isCanadianPostalCode = upper digit upper " " digit upper digit
 
-  isVisa = "4" digit digit digit digit digit digit digit digit digit digit digit digit digit digit digit     --Fifteen
-         | "4" digit digit digit digit digit digit digit digit digit digit digit digit                       --Twelve
+  isVisa = "4" digit digit digit digit digit digit digit
+           digit digit digit digit digit (digit digit digit)?
 
-  isMasterCard = "5" ("1"|"2"|"3"|"4"|"5") digit digit digit digit digit digit
+  isMasterCard = "5" "1".."5" digit digit digit digit digit digit
                  digit digit digit digit digit digit digit digit
 
   isAdaFloat = adaBasedLit | adaDecimalLit
   adaDecimalLit = adaInt ("." adaInt)? (("E"|"e")("+"|"-")? adaInt)?
   adaBasedLit = adaInt "#" adaExtInt ("." adaExtInt)? "#" (("E"|"e")("+"|"-")? adaInt)?
   adaInt = digit ("_"? digit)*
-  adaExtInt = alnum ("_"? alnum)*
+  adaExtInt = hexDigit ("_"? hexDigit)*
 
   isNotThreeEndingInOO =  ~(letter ("o"|"O")("o"|"O")) letter*
 

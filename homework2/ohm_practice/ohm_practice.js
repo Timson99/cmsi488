@@ -1,41 +1,5 @@
 const ohm = require('ohm-js');
 
-const HW2_Q2 = ohm.grammar(`HW2_Q2 {
-  isCanadianPostalCode = upper digit upper " " digit upper digit
-
-  isVisa = "4" digit digit digit digit digit digit digit
-           digit digit digit digit digit (digit digit digit)?
-
-  isMasterCard = "5" "1".."5" digit digit digit digit digit digit
-                 digit digit digit digit digit digit digit digit
-
-  isAdaFloat = adaBasedLit | adaDecimalLit
-  adaDecimalLit = adaInt ("." adaInt)? (("E"|"e")("+"|"-")? adaInt)?
-  adaBasedLit = adaInt "#" adaExtInt ("." adaExtInt)? "#" (("E"|"e")("+"|"-")? adaInt)?
-  adaInt = digit ("_"? digit)*
-  adaExtInt = hexDigit ("_"? hexDigit)*
-
-  isNotThreeEndingInOO =  ~(letter ("o"|"O")("o"|"O")) letter*
-
-  isDivisibleBy64 = (~"1000000"  ("0" | "1"))*  "1000000"         --nonzero
-                  |  ("0")+                                       --zero
-
-  isEightThroughTwentyNine = ("8"|"9")                           --eightnine
-                           |(("1"|"2") digit)                    --therest
-
-  isMLComment = "(*" (~"(*" ~"*)"  any)* "*)"
-
-  isNotDogDoorDenNoLookAround = dogdoorden letter+               --begins
-                              | (dogdoorden)? letter+            --anywhere
-                              | ""                               --nothing
-
-  isNotDogDoorDenWithLookAround = dogdoorden letter+             --begins
-                                 | ~dogdoorden letter*           --anywhere
-
-  dogdoorden = "dog" | "door" | "den"
-
-}`);
-
 function isCanadianPostalCode(s) {
   const grammar = ohm.grammar(`isCPC {
     isCPC = upper digit upper " " digit upper digit

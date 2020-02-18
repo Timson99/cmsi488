@@ -6,9 +6,15 @@
   "scripts": {
     "test": "jest --collect-coverage"
   },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "/coverage/"
+    ]
+  },
   "author": "Luis Garcia, Tim Herrmann, Joe Maiocco, Kevin McInerney, Bennett Shingledecker, Kevin Solis",
   "license": "MIT",
   "dependencies": {
-    "jest": "^25.1.0"
+    "jest": "^25.1.0",
+    "ohm-js": "^0.14.0"
   }
 }

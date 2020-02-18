@@ -1,5 +1,6 @@
 const assert = require('assert');
-const r = require('../regex_practice');
+const regex_problems = require('../regex_practice/regex_practice');
+const ohm_problems = require('../ohm_practice/ohm_practice');
 
 const FIXTURE = {
   isCanadianPostalCode: {
@@ -7,7 +8,7 @@ const FIXTURE = {
     bad: ['A7X   9B2', 'C7E9U2', '', 'Dog'],
   },
   isVisa: {
-    good: ['4128976567772613', '4089655522138888'],
+    good: ['4128976567772613', '4089655522138888', '4089655522138'],
     bad: ['43333', '42346238746283746823'],
   },
   isMasterCard: {
@@ -23,11 +24,13 @@ const FIXTURE = {
     bad: ['fOo', 'gOO'],
   },
   isDivisibleBy64: {
-    good: ['0','1101000000'],
+    good: ['0', '1101000000'],
     bad: ['1', '00000000100000', '1000000001'],
   },
   isEightThroughTwentyNine: {
-    good: Array(22).fill(0).map((x, i) => i + 8),
+    good: Array(22)
+      .fill(0)
+      .map((x, i) => i + 8),
     bad: ['3', '-0', '00009', 'dog', '361'],
   },
   isMLComment: {
@@ -43,7 +46,24 @@ const FIXTURE = {
 FIXTURE.isNotDogDoorDenWithLookAround = FIXTURE.isNotDogDoorDenNoLookAround;
 
 describe('In the regex tester', () => {
-  Object.entries(r).forEach(([name, matchingFunction]) => {
+  Object.entries(regex_problems).forEach(([name, matchingFunction]) => {
+    describe(`the function ${name}`, () => {
+      FIXTURE[name].good.forEach((s) => {
+        it(`accepts ${s}`, () => {
+          expect(matchingFunction(s)).toBe(true);
+        });
+      });
+      FIXTURE[name].bad.forEach((s) => {
+        it(`rejects ${s}`, () => {
+          expect(!matchingFunction(s)).toBe(true);
+        });
+      });
+    });
+  });
+});
+
+describe('In the ohm tester', () => {
+  Object.entries(ohm_problems).forEach(([name, matchingFunction]) => {
     describe(`the function ${name}`, () => {
       FIXTURE[name].good.forEach((s) => {
         it(`accepts ${s}`, () => {

@@ -1,6 +1,6 @@
 const assert = require('assert');
-const regex_problems = require('../regex_practice/regex_practice');
-const ohm_problems = require('../ohm_practice/ohm_practice');
+const regex_functions = require('../regex_practice/regex_practice');
+const ohm_matching_functions = require('../ohm_practice/ohm_practice');
 
 const FIXTURE = {
   isCanadianPostalCode: {
@@ -8,7 +8,7 @@ const FIXTURE = {
     bad: ['A7X   9B2', 'C7E9U2', '', 'Dog'],
   },
   isVisa: {
-    good: ['4128976567772613', '4089655522138888', '4089655522138'],
+    good: ['4128976567772613', '4089655522138888'],
     bad: ['43333', '42346238746283746823'],
   },
   isMasterCard: {
@@ -24,7 +24,7 @@ const FIXTURE = {
     bad: ['fOo', 'gOO'],
   },
   isDivisibleBy64: {
-    good: ['0', '1101000000'],
+    good: ['0', '1101000000', '000000', '0001000000'],
     bad: ['1', '00000000100000', '1000000001'],
   },
   isEightThroughTwentyNine: {
@@ -42,39 +42,25 @@ const FIXTURE = {
     bad: ['dog', 'door'],
   },
 };
-
+// Looks funny, but you can probably figure out what it does
 FIXTURE.isNotDogDoorDenWithLookAround = FIXTURE.isNotDogDoorDenNoLookAround;
-
-describe('In the regex tester', () => {
-  Object.entries(regex_problems).forEach(([name, matchingFunction]) => {
-    describe(`the function ${name}`, () => {
-      FIXTURE[name].good.forEach((s) => {
-        it(`accepts ${s}`, () => {
-          expect(matchingFunction(s)).toBe(true);
+function runTests(suiteName, suite) {
+  describe(`In the ${suiteName} tester`, () => {
+    Object.entries(suite).forEach(([name, matchingFunction]) => {
+      describe(`the function ${name}`, () => {
+        FIXTURE[name].good.forEach(s => {
+          it(`accepts ${s}`, () => {
+            assert.ok(matchingFunction(s));
+          });
         });
-      });
-      FIXTURE[name].bad.forEach((s) => {
-        it(`rejects ${s}`, () => {
-          expect(!matchingFunction(s)).toBe(true);
-        });
-      });
-    });
-  });
-});
-
-describe('In the ohm tester', () => {
-  Object.entries(ohm_problems).forEach(([name, matchingFunction]) => {
-    describe(`the function ${name}`, () => {
-      FIXTURE[name].good.forEach((s) => {
-        it(`accepts ${s}`, () => {
-          expect(matchingFunction(s)).toBe(true);
-        });
-      });
-      FIXTURE[name].bad.forEach((s) => {
-        it(`rejects ${s}`, () => {
-          expect(!matchingFunction(s)).toBe(true);
+        FIXTURE[name].bad.forEach(s => {
+          it(`rejects ${s}`, () => {
+            assert.ok(!matchingFunction(s));
+          });
         });
       });
     });
   });
-});
+}
+runTests('regex', regex_functions);
+runTests('ohm', ohm_matching_functions);

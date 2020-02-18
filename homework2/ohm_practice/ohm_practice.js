@@ -37,43 +37,87 @@ const HW2_Q2 = ohm.grammar(`HW2_Q2 {
 }`);
 
 function isCanadianPostalCode(s) {
-  return HW2_Q2.match(s, 'isCanadianPostalCode').succeeded();
+  const grammar = ohm.grammar(`isCPC {
+    isCPC = upper digit upper " " digit upper digit
+  }`);
+  return grammar.match(s).succeeded();
 }
 
 function isVisa(s) {
-  return HW2_Q2.match(s, 'isVisa').succeeded();
+  const grammar = ohm.grammar(`isVisa {
+    isVisa = "4" digit digit digit digit digit digit digit
+             digit digit digit digit digit (digit digit digit)?
+  }`);
+  return grammar.match(s).succeeded();
 }
 
 function isMasterCard(s) {
-  return HW2_Q2.match(s, 'isMasterCard').succeeded();
+  const grammar = ohm.grammar(`isMasterCard {
+    isMasterCard = "5" "1".."5" digit digit digit digit digit digit
+                   digit digit digit digit digit digit digit digit
+  }`);
+  return grammar.match(s).succeeded();
 }
 
 function isAdaFloat(s) {
-  return HW2_Q2.match(s, 'isAdaFloat').succeeded();
+  const grammar = ohm.grammar(`isAdaFloat {
+    isAdaFloat = adaBasedLit | adaDecimalLit
+    adaDecimalLit = adaInt ("." adaInt)? (("E"|"e")("+"|"-")? adaInt)?
+    adaBasedLit = adaInt "#" adaExtInt
+                  ("." adaExtInt)? "#" (("E"|"e")("+"|"-")? adaInt)?
+    adaInt = digit ("_"? digit)*
+    adaExtInt = hexDigit ("_"? hexDigit)*
+  }`);
+  return grammar.match(s).succeeded();
 }
 
 function isNotThreeEndingInOO(s) {
-  return HW2_Q2.match(s, 'isNotThreeEndingInOO').succeeded();
+  const grammar = ohm.grammar(`isNotThreeEndingInOO {
+    isNotThreeEndingInOO =  ~(letter ("o"|"O")("o"|"O")) letter*
+  }`);
+  return grammar.match(s).succeeded();
 }
 
 function isDivisibleBy64(s) {
-  return HW2_Q2.match(s, 'isDivisibleBy64').succeeded();
+  const grammar = ohm.grammar(`isDivisibleBy64 {
+    isDivisibleBy64 = (~"1000000"  ("0" | "1"))*  "1000000"  --nonzero
+                    |  ("0")+                                --zero
+  }`);
+  return grammar.match(s).succeeded();
 }
 
 function isEightThroughTwentyNine(s) {
-  return HW2_Q2.match(s, 'isEightThroughTwentyNine').succeeded();
+  const grammar = ohm.grammar(`isEightThroughTwentyNine {
+    isEightThroughTwentyNine = ("8"|"9")         --eightnine
+                             |(("1"|"2") digit)  --therest
+  }`);
+  return grammar.match(s).succeeded();
 }
 
 function isMLComment(s) {
-  return HW2_Q2.match(s, 'isMLComment').succeeded();
+  const grammar = ohm.grammar(`isMLComment {
+    isMLComment = "(*" (~"(*" ~"*)"  any)* "*)"
+  }`);
+  return grammar.match(s).succeeded();
 }
 
 function isNotDogDoorDenNoLookAround(s) {
-  return HW2_Q2.match(s, 'isNotDogDoorDenNoLookAround').succeeded();
+  const grammar = ohm.grammar(`DDDNoLookAround {
+    DDDNoLookAround = dogdoorden letter+       --begins
+                    | (dogdoorden)? letter+    --anywhere
+                    | ""                       --nothing
+    dogdoorden = "dog" | "door" | "den"
+  }`);
+  return grammar.match(s).succeeded();
 }
 
 function isNotDogDoorDenWithLookAround(s) {
-  return HW2_Q2.match(s, 'isNotDogDoorDenWithLookAround').succeeded();
+  const grammar = ohm.grammar(`DDDWithLookAround {
+    DDDWithLookAround = dogdoorden letter+     --begins
+                      | ~dogdoorden letter*    --anywhere
+    dogdoorden = "dog" | "door" | "den"
+  }`);
+  return grammar.match(s).succeeded();
 }
 
 module.exports = {

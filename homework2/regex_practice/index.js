@@ -33,7 +33,7 @@ function isMLComment(s) {
 }
 
 function isNotDogDoorDenNoLookAround(s) {
-  return /^(|[^d][a-zA-Z]*|d([^eo][a-zA-Z]*)??|do([^go][a-zA-Z]*)??|de([^n][a-zA-Z]*)??|doo([^r][a-zA-Z]*)??|((dog|den|door)([a-zA-Z]+)))$/.test(
+  return /^(|[a-ce-zA-Z][a-zA-Z]*|d([a-df-np-zA-Z][a-zA-Z]*)??|do([a-fh-np-zA-Z][a-zA-Z]*)??|de([a-mo-zA-Z][a-zA-Z]*)??|doo([a-qs-zA-Z][a-zA-Z]*)??|((dog|den|door)([a-zA-Z]+)))$/.test(
     s,
   );
 }

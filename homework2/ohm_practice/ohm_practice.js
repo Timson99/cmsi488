@@ -37,7 +37,7 @@ function isAdaFloat(s) {
 
 function isNotThreeEndingInOO(s) {
   const grammar = ohm.grammar(`isNotThreeEndingInOO {
-    isNotThreeEndingInOO =  ~(letter ("o"|"O")("o"|"O")) letter*
+    isNotThreeEndingInOO =  ~(letter ("o"|"O")("o"|"O") ~letter ) letter*
   }`);
   return grammar.match(s).succeeded();
 }
@@ -60,7 +60,7 @@ function isEightThroughTwentyNine(s) {
 
 function isMLComment(s) {
   const grammar = ohm.grammar(`isMLComment {
-    isMLComment = "(*" (~"(*" ~"*)"  any)* "*)"
+    isMLComment = "(*" ( ~"*)"  any)* "*)"
   }`);
   return grammar.match(s).succeeded();
 }

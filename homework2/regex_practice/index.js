@@ -7,7 +7,9 @@ function isVisa(s) {
 }
 
 function isMasterCard(s) {
-  return /^5[1-5]\d{14}$/.test(s);
+  return /^(?:5[1-5][0-9]{2}|222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720)[0-9]{12}$/.test(
+    s,
+  );
 }
 // /*
 function isAdaFloat(s) {
@@ -33,7 +35,7 @@ function isMLComment(s) {
 }
 
 function isNotDogDoorDenNoLookAround(s) {
-  return /^(|[a-ce-zA-Z][a-zA-Z]*|d([a-df-np-zA-Z][a-zA-Z]*)??|do([a-fh-np-zA-Z][a-zA-Z]*)??|de([a-mo-zA-Z][a-zA-Z]*)??|doo([a-qs-zA-Z][a-zA-Z]*)??|((dog|den|door)([a-zA-Z]+)))$/.test(
+  return /^(|[a-ce-zA-Z][a-zA-Z]*|d([a-df-np-zA-Z][a-zA-Z]*)?|do([a-fh-np-zA-Z][a-zA-Z]*)?|de([a-mo-zA-Z][a-zA-Z]*)?|doo([a-qs-zA-Z][a-zA-Z]*)?|((dog|den|door)([a-zA-Z]+)))$/.test(
     s,
   );
 }

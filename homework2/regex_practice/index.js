@@ -1,5 +1,5 @@
 function isCanadianPostalCode(s) {
-  return /^[A-Z]\d[A-Z]\s\d[A-Z]\d$/.test(s);
+  return /^[A-Z]\d[A-Z] \d[A-Z]\d$/.test(s);
 }
 
 function isVisa(s) {
@@ -14,7 +14,7 @@ function isAdaFloat(s) {
   return /(\d*(.(\d+))?(E(-|\+)?\d*)?|)/.test(s)
 
 function isNotThreeEndingInOO(s) {
-  return /^^((?!^[a-zA-Z][Oo][Oo]$)[a-zA-Z]*)$$/.test(s)
+  return /^^((?!^[a-zA-Z][Oo][Oo](?![a-zA-Z])$)[a-zA-Z]*)$$/.test(s);
 }
 
 function isDivisibleBy64(s) {
@@ -22,19 +22,21 @@ function isDivisibleBy64(s) {
 }
 
 function isEightThroughTwentyNine(s) {
-  return /^[8-9]|[1]\d|2[0-9]/.test(s);
+  return /^([8-9]|[1]\d|2[0-9])$/.test(s);
 }
 
 function isMLComment(s) {
-  return /^\(\*((?!\(\*)(?!\*\)).)*\*\)$/.test(s)
+  return /^\(\*((?!\*\)).)*\*\)$/.test(s);
 }
 
 function isNotDogDoorDenNoLookAround(s) {
-  return /^(|[^d][a-zA-Z]*|d([^eo][a-zA-Z]*)??|do([^go][a-zA-Z]*)??|de([^n][a-zA-Z]*)??|doo([^r][a-zA-Z]*)??|((dog|den|door)([a-zA-Z]+)))$/.test(s)
+  return /^(|[^d][a-zA-Z]*|d([^eo][a-zA-Z]*)??|do([^go][a-zA-Z]*)??|de([^n][a-zA-Z]*)??|doo([^r][a-zA-Z]*)??|((dog|den|door)([a-zA-Z]+)))$/.test(
+    s,
+  );
 }
 
 function isNotDogDoorDenWithLookAround(s) {
-  return /^((?!(dog|door|den))[A-Za-z]*)|((dog|door|den)[A-Za-z]+)$/.test(s)
+  return /^((?!(dog|door|den))[A-Za-z]*)|((dog|door|den)[A-Za-z]+)$/.test(s);
 }
 
 module.exports = {

@@ -1,6 +1,6 @@
 const assert = require('assert');
-const regexModule = require('../regex_practice/regex_practice');
-const ohmModule = require('../ohm_practice/ohm_practice');
+const regexModule = require('../regex_practice');
+const ohmModule = require('../ohm_practice');
 
 const FIXTURE = {
   isCanadianPostalCode: {

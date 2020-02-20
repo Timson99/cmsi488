@@ -1,5 +1,5 @@
 function isCanadianPostalCode(s) {
-  return /^[A-Z]\d[A-Z] \d[A-Z]\d$/.test(s);
+  return /^[A-CEG-HJ-NPR-TVXY]\d[A-CEG-HJ-NPR-TV-Z] \d[A-CEG-HJ-NPR-TV-Z]\d$/.test(s);
 }
 
 function isVisa(s) {

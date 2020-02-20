@@ -2,7 +2,9 @@ const ohm = require('ohm-js');
 
 function isCanadianPostalCode(s) {
   const grammar = ohm.grammar(`isCPC {
-    isCPC = upper digit upper " " digit upper digit
+    isCPC = ("A".."C"|"E"|"G".."H"|"J".."N"|"P"|"R".."T"|"V"|"X"|"Y") digit
+            ("A".."C"|"E"|"G".."H"|"J".."N"|"P"|"R".."T"|"V".."Z") " " 
+            digit ("A".."C"|"E"|"G".."H"|"J".."N"|"P"|"R".."T"|"V".."Z") digit
   }`);
   return grammar.match(s).succeeded();
 }

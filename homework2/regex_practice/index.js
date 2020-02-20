@@ -1,5 +1,5 @@
 function isCanadianPostalCode(s) {
-  return /^[A-Z]\d[A-Z] \d[A-Z]\d$/.test(s);
+  return /^[A-CEG-HJ-NPR-TVXY]\d[A-CEG-HJ-NPR-TV-Z] \d[A-CEG-HJ-NPR-TV-Z]\d$/.test(s);
 }
 
 function isVisa(s) {
@@ -9,9 +9,12 @@ function isVisa(s) {
 function isMasterCard(s) {
   return /^5[1-5]\d{14}$/.test(s);
 }
-
+// /*
 function isAdaFloat(s) {
-  return /(\d*(.(\d+))?(E(-|\+)?\d*)?|)/.test(s)
+  return /^\d(_?\d)*(((\.\d(_?\d)*)?)|(#[\dA-Za-z](_?[\dA-Za-z])*((\.[\dA-Za-z](_?[\dA-Za-z])*)?#)))([Ee](-|\+)?\d(_?\d)*)?$/.test(
+    s,
+  );
+}
 
 function isNotThreeEndingInOO(s) {
   return /^^((?!^[a-zA-Z][Oo][Oo](?![a-zA-Z])$)[a-zA-Z]*)$$/.test(s);
@@ -49,5 +52,5 @@ module.exports = {
   isEightThroughTwentyNine,
   isMLComment,
   isNotDogDoorDenNoLookAround,
-  isNotDogDoorDenWithLookAround
-}
+  isNotDogDoorDenWithLookAround,
+};

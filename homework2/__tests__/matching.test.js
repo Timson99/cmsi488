@@ -4,8 +4,8 @@ const ohmModule = require('../ohm_practice');
 
 const FIXTURE = {
   isCanadianPostalCode: {
-    good: ['A7X 2P8', 'P8E 4R2', 'Q1V 9P2'],
-    bad: ['A7X   9B2', 'C7E9U2', '', 'Dog', 'Q1V\t9P2', ' A7X 2P8', 'A7X 2P8 '],
+    good: ['A7X 2P8', 'P8E 4R2', 'P1V 9P2', 'Y3C 4G7', 'H0H 0H0', 'H5J 2N2', 'N1P 4R7', 'T9V 0Z6'],
+    bad: ['A7X   9B2', 'C7E9U2', '', 'Dog', 'Q1V\t9P2', ' A7X 2P8', 'A7X 2P8 ', 'Q1V 9P2', 'W1W 9L9', 'Z6E 7J7', 'D41 1D1', 'F5G 4T4', 'I0L 2E2', 'O0O 0O0', 'U1W 0U6'],
   },
   isVisa: {
     good: ['4128976567772613', '4089655522138888', '4098562516243'],

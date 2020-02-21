@@ -3,7 +3,7 @@ const ohm = require('ohm-js');
 function isCanadianPostalCode(s) {
   const grammar = ohm.grammar(`isCPC {
     isCPC = ("A".."C"|"E"|"G".."H"|"J".."N"|"P"|"R".."T"|"V"|"X"|"Y") digit
-            ("A".."C"|"E"|"G".."H"|"J".."N"|"P"|"R".."T"|"V".."Z") " " 
+            ("A".."C"|"E"|"G".."H"|"J".."N"|"P"|"R".."T"|"V".."Z") " "
             digit ("A".."C"|"E"|"G".."H"|"J".."N"|"P"|"R".."T"|"V".."Z") digit
   }`);
   return grammar.match(s).succeeded();
@@ -11,16 +11,22 @@ function isCanadianPostalCode(s) {
 
 function isVisa(s) {
   const grammar = ohm.grammar(`isVisa {
-    isVisa = "4" digit digit digit digit digit digit digit
-             digit digit digit digit digit (digit digit digit)?
+    isVisa = "4" d d d d d d d d d d d d (d d d)?
+    d = digit
   }`);
   return grammar.match(s).succeeded();
 }
 
 function isMasterCard(s) {
   const grammar = ohm.grammar(`isMasterCard {
-    isMasterCard = "5" "1".."5" digit digit digit digit digit digit
-                   digit digit digit digit digit digit digit digit
+    isMasterCard = "5" "1".."5" d d d12     --fives
+                 | "222" "1".."9" d12       --range2221_2229
+                 | "22" "3".."9" d d12      --range2230_2299
+                 | "2" "3".."6" d d d12     --range2300_2699
+                 | "27" "0".."1" d d d12    --range2700_2719
+                 | "2720" d12               --range2720
+    d12 = d d d d d d d d d d d d
+    d = digit
   }`);
   return grammar.match(s).succeeded();
 }

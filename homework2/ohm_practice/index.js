@@ -34,9 +34,9 @@ function isMasterCard(s) {
 function isAdaFloat(s) {
   const grammar = ohm.grammar(`isAdaFloat {
     isAdaFloat = adaBasedLit | adaDecimalLit
-    adaDecimalLit = adaInt ("." adaInt)? exponent
-    adaBasedLit = adaInt "#" adaExtInt ("." adaExtInt)? "#" exponent
-    exponent = (("E"|"e")("+"|"-")? adaInt)?
+    adaDecimalLit = adaInt ("." adaInt)? exponent?
+    adaBasedLit = adaInt "#" adaExtInt ("." adaExtInt)? "#" exponent?
+    exponent = (("E"|"e")("+"|"-")? adaInt)
     adaInt = digit ("_"? digit)*
     adaExtInt = hexDigit ("_"? hexDigit)*
   }`);

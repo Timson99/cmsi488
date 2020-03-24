@@ -26,7 +26,7 @@ f();                // line 7
 
   a.) The code would output ```3``` then ```5``` if   
   b.) The code would output ```undefined NaN``` if 
-  c.) The code would output ```Error on line 3: x is not declared``` if
+  c.) The code would output ```Error on line 3: x is not declared``` if scope only deals with code blocks (?).
   d.) The code would output ```75354253672``` then ```75354253674``` if 
   e.) The code would output ```3``` then ```-23482937128``` if
   f.) The code would output ```Error on line 4: x used in its own declaration``` if

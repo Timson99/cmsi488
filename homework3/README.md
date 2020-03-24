@@ -8,7 +8,7 @@
   c.) Incrementing a read-only variable is a **semantic error**.  
   d.) Accessing a private field in another class is a **not a compile time error** (if you use getters and setters).  
   e.) Using an uninitialized variable is a **semantic error**.  
-  f.) Dereferencing a null reference is a **not a compile time error** as a NullPointerException error is thrown during runtime.  
+  f.) Dereferencing a null reference is a **not a compile time error** as a NullPointerException is thrown during runtime.  
   g.) ```null instanceof C``` is **not a compile time error**.  
   h.) ```!!x``` is a **syntax error** (but it's valid code in JavaScript, I think).  
 
@@ -24,12 +24,12 @@ f();                // line 7
 ```
 **For each of the following outputs, state scope rules that would have caused them:** 
 
-  a.)   
-  b.)  
-  c.)  
-  d.)  
-  e.)  
-  f.)  
+  a.) The code would output ```3``` then ```5``` if   
+  b.) The code would output ```undefined NaN``` if 
+  c.) The code would output ```Error on line 3: x is not declared``` if
+  d.) The code would output ```75354253672``` then ```75354253674``` if 
+  e.) The code would output ```3``` then ```-23482937128``` if
+  f.) The code would output ```Error on line 4: x used in its own declaration``` if
 
 **3.) Describe the semantics of private in Ruby and C#. (Hint: they’re quite different.) Write well. You won’t get any points for a poorly written description.**  
 

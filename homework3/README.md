@@ -24,12 +24,12 @@ f();                // line 7
 ```
 **For each of the following outputs, state scope rules that would have caused them:** 
 
-  a.) The code would output ```3``` then ```5``` if the programming language is dynamically scoped.    
-  b.) The code would output ```undefined NaN``` if the programming language both dynamically and functionally scoped.  
-  c.) The code would output ```Error on line 3: x is not declared``` if the programming language is statically and functionally scoped.   
-  d.) The code would output ```75354253672``` then ```75354253674``` if the programming language .   
-  e.) The code would output ```3``` then ```-23482937128``` if the programming language .  
-  f.) The code would output ```Error on line 4: x used in its own declaration``` if the programming language .  
+  a.) The code would output ```3``` then ```5``` if the variable ```x``` is globally scoped.    
+  b.) The code would output ```undefined NaN``` if the variable ```x``` is functionally scoped. Much like using var in JavaScript (*shudder*), the declaration of ```x``` within the function intializes as undefined, leading to the unwanted behavior produced by the print statement and reassignment.  
+  c.) The code would output ```Error on line 3: x is not declared``` if the variable ```x``` is block scoped.   
+  d.) The code would output ```75354253672``` then ```75354253674``` if the variable ```x``` is block scoped and the programming language does not automatically initialize declared variables. Instead, ```x``` in this case most likely refers to a random value already stored in memory.  
+  e.) The code would output ```3``` then ```-23482937128``` if the program first uses the global variable ```x``` and then defines a local variable ```x``` that shadows the global ```x```. However, since the local ```x``` has not yet been initialized, it pulls a random value in memory in the expression ```x + 2```, leading to the strange output.  
+  f.) The code would output ```Error on line 4: x used in its own declaration``` if the variable ```x``` is scoped much like variables in Ada, where the scope of a binding begins after the declaration finishes, but the variable name for the binding cannot be used within the declaration itself.  
 
 **3.) Describe the semantics of private in Ruby and C#. (Hint: they’re quite different.) Write well. You won’t get any points for a poorly written description.**  
 

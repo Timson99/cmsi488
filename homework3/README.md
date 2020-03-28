@@ -31,6 +31,13 @@ f();                // line 7
   e.) The code would output ```3``` then ```-23482937128``` if the program first uses the global variable ```x``` and then defines a local variable ```x``` that shadows the global ```x```. However, since the local ```x``` has not yet been initialized, it pulls a random value in memory in the expression ```x + 2```, leading to the strange output.     
   f.) The code would output ```Error on line 4: x used in its own declaration``` if the variable ```x``` is scoped much like variables in Ada, where the scope of a binding begins after the declaration finishes, but the variable name for the binding cannot be used within the declaration itself.     
 
+  a.) The code would output ```3``` then ```5``` if   
+  b.) The code would output ```undefined NaN``` if    
+  c.) The code would output ```Error on line 3: x is not declared``` if scope only deals with code blocks (?).   
+  d.) The code would output ```75354253672``` then ```75354253674``` if    
+  e.) The code would output ```3``` then ```-23482937128``` if   
+  f.) The code would output ```Error on line 4: x used in its own declaration``` if   
+
 **3.) Describe the semantics of private in Ruby and C#. (Hint: they’re quite different.) Write well. You won’t get any points for a poorly written description.**  
 
   - Private in Ruby: In Ruby, private methods are accessible only within the object in which they have been defined. Both class definitions and class instances are objects in Ruby. Private methods and data *can* technically be publicized by using public methods within the same object to access and display them. However, attempting to call a private method directly from any kind of class object results in a semantic error.    

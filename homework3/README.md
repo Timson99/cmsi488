@@ -33,5 +33,5 @@ f();                // line 7
 
 **3.) Describe the semantics of private in Ruby and C#. (Hint: they’re quite different.) Write well. You won’t get any points for a poorly written description.**  
 
-  - Private in Ruby: The ```private``` access modifier in Ruby only applies to methods, as class and instance variables are always essentially protected/private in Ruby by default. Private methods are only accessible within the object in which they are declared. 
-  - Private in C#: The ```private``` access modifier in C# causes fields and methods to only be accessible within the class or struct in which they are declared. Attempting to reference a private field or method outside of the struct or class in which it was declared results in a compile-time error. 
+  - Private in Ruby: In Ruby, private methods are accessible only within the object in which they have been defined. As such, attempting to call a private method from an instance of a class results in a semantic error. 
+  - Private in C#: In C#, private fields and methods are accessible only within the class or struct in which they have been defined. As such, attempting to call a private method or access a private field outside of the class or struct body results in a semantic error. 

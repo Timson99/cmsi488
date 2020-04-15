@@ -1,6 +1,3 @@
-**PLEASE DOUBLE-CHECK THESE, I PROBABLY SCREWED UP ON SOME, THANK YOU**
-
-
 **1.) Classify the following as a syntax error, semantic error, or not a compile time error. In the case where code is given, assume all identifiers are properly declared and in scope. All items refer to the Java language.**  
 
   a.) ```x+++-y``` is **not a compile time error**.  

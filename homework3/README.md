@@ -7,7 +7,7 @@
   e.) Using an uninitialized variable is a **semantic error**.  
   f.) Dereferencing a null reference is a **not a compile time error** as a NullPointerException is thrown during runtime.  
   g.) ```null instanceof C``` is **not a compile time error**.  
-  h.) ```!!x``` is a **syntax error** (but it's valid code in JavaScript, I think).  
+  h.) ```!!x``` is a **not a compile time error**. 
 
 **2.) Here’s a code fragment in some generic language:**
 ```
@@ -21,7 +21,7 @@ f();                // line 7
 ```
 **For each of the following outputs, state scope rules that would have caused them:** 
 
-  a.) The code would output ```3``` then ```5``` if the variable ```x``` is globally scoped.       
+  a.) The code would output ```3``` then ```5``` if the variable ```x``` is dynamically scoped.       
   b.) The code would output ```undefined NaN``` if the variable ```x``` is functionally scoped. Much like using var in JavaScript (*shudder*), the declaration of ```x``` within the function intializes as undefined, leading to the unwanted behavior produced by the print statement and reassignment.     
   c.) The code would output ```Error on line 3: x is not declared``` if the variable ```x``` is block scoped.      
   d.) The code would output ```75354253672``` then ```75354253674``` if the variable ```x``` is block scoped and the programming language does not automatically initialize declared variables. Instead, ```x``` in this case most likely refers to a random value already stored in memory.     
